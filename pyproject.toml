@@ -1,0 +1,10 @@
+[project]
+name = "htbm_py"
+version = "0.1"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
