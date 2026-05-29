@@ -8,33 +8,33 @@ from htbm_py.memory import Memory
 ## Define problem ########################
 
 ## chained_CB3_I
-from test_functions.chained_CB3_I import chained_CB3_I
-n = 5
-problem_data = chained_CB3_I(n)
+# from test_functions.chained_CB3_I import chained_CB3_I
+# n = 5
+# problem_data = chained_CB3_I(n)
 
 ## LW2019_85
-# from test_functions.lw2019_85 import lw2019_85
-# np.random.seed(0)
-# n = 8
-# k = 3
-# lambd = np.random.rand(k)
-# lambd = lambd / np.sum(lambd)
-# tmp = [2*np.random.rand(n) - 1 for _ in range(k)]
-# tmp2 = np.matmul(lambd,np.stack(tmp))
-# g_arr = [v - tmp2 for v in tmp]
+from test_functions.lw2019_85 import lw2019_85
+np.random.seed(0)
+n = 8
+k = 3
+lambd = np.random.rand(k)
+lambd = lambd / np.sum(lambd)
+tmp = [2*np.random.rand(n) - 1 for _ in range(k)]
+tmp2 = np.matmul(lambd,np.stack(tmp))
+g_arr = [v - tmp2 for v in tmp]
 
-# H_arr = []
-# for _ in range(k):
-#     tmp = 2*np.random.rand(n,n) - 1
-#     H_arr.append(0.5 * (tmp + tmp.transpose()))
+H_arr = []
+for _ in range(k):
+    tmp = 2*np.random.rand(n,n) - 1
+    H_arr.append(0.5 * (tmp + tmp.transpose()))
 
-# c_arr = [np.random.rand() for _ in range(k)]
+c_arr = [np.random.rand() for _ in range(k)]
 
-# g_arr = np.round(g_arr,4)
-# H_arr = np.round(H_arr,4)
-# c_arr = np.round(c_arr,4)
+g_arr = np.round(g_arr,4)
+H_arr = np.round(H_arr,4)
+c_arr = np.round(c_arr,4)
 
-# problem_data = lw2019_85(g_arr,H_arr,c_arr)
+problem_data = lw2019_85(g_arr,H_arr,c_arr)
 
 ## half_and_half
 # from test_functions.half_and_half import half_and_half
@@ -68,13 +68,13 @@ algo_options['local_options'] = local_options
 ## Run method ########################
 
 eps1 = 10
-x1 = 2*np.ones(n)
+x1 = np.ones(n)
 
 result_local_method = local_method(x1,eps1,problem_data,algo_options)
 
 ## Plots ########################
 
-x_min = np.ones(n)
+x_min = np.zeros(n)
 f_min = problem_data.oracle[0](x_min)
 
 # x_min = result_local_method['best_x']
