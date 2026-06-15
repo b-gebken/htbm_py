@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 
 from htbm_py.htbm import local_method
 from htbm_py.optimization_problem import OptimizationProblem
-from htbm_py.memory import Memory
 
 ## Define problem ########################
 
