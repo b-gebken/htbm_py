@@ -29,10 +29,6 @@ for _ in range(k):
 
 c_arr = [np.random.rand() for _ in range(k)]
 
-g_arr = np.round(g_arr,4)
-H_arr = np.round(H_arr,4)
-c_arr = np.round(c_arr,4)
-
 problem_data = lw2019_85(g_arr,H_arr,c_arr)
 
 ## half_and_half
