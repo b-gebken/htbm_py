@@ -5,6 +5,10 @@ class Memory:
         self.oracle_vals = []
 
     def add(self, new_sample_pts, new_oracle_vals):
+
+        if len(new_sample_pts) != len(new_oracle_vals):
+            raise SystemExit('ERROR: Memory input with different lengths')
+
         self.sample_pts.extend(new_sample_pts)
         self.oracle_vals.extend(new_oracle_vals)
 
