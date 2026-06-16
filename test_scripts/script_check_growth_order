@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import time
 
 from htbm_py.htbm import sample_hypersphere
+from htbm_py.dgs import smallest_norm_element
 
 ## Define problem ########################
 
@@ -11,6 +12,7 @@ from torch import nn
 from test_functions.simple_NN import simple_NN
 from test_functions.simple_NN import loss_unreg
 from test_functions.simple_NN import visualize
+
 class NeuralNetwork(nn.Module):
     def __init__(self):
         super().__init__()
@@ -39,7 +41,7 @@ x = np.array([-3.31027137e-05,  1.30121360e+00,  8.83305740e-01, -6.61817766e-06
        -4.80340780e-01,  1.09053386e+00, -3.21685127e+00,  1.86998978e+00,
        -1.26323430e-01])
 
-N = 1000
+N = 500
 eps = 0.0001
 p = 2
 
@@ -67,8 +69,8 @@ print('Time: ',end_time - start_time)
 print('Min. norm: ',np.min([np.linalg.norm(grad_mat[i,:]) for i in range(N)]))
 print('Max. norm: ',np.max([np.linalg.norm(grad_mat[i,:]) for i in range(N)]))
 
-# sort_inds = np.argsort(grad_mat[:,1])
-# [plt.plot(grad_mat[sort_inds,i],'o-') for i in range(n)]
+g_eps = smallest_norm_element([grad_mat[i,:] for i in range(N)])
+print('||g_eps||: ', np.linalg.norm(g_eps))
 
 [plt.plot(np.sort(grad_mat[:,i]),'o-') for i in range(n)]
 
