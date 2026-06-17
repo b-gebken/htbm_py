@@ -100,6 +100,7 @@ def solve(W,W_f,W_grad,W_hess,x,eps,sp_solver_options):
     )
 
     nlp.add_option('tol', sp_solver_options['tol'])
+    nlp.add_option('constr_viol_tol', sp_solver_options['tol'])
     nlp.add_option('print_level', 0)
     nlp.add_option('line_search_method', 'cg-penalty')
 
