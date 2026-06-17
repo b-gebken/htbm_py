@@ -39,7 +39,7 @@ problem_data.x0 = 6*np.random.rand(n) - 3
 ## Set the parameters for the method ############
 
 algo_options = {
-    'N_iter': 10,
+    'N_iter': 1000,
     'H0': np.eye(n),
     'c1': 0.0001,
     'c2': 0.5,
