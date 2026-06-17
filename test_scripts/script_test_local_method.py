@@ -62,8 +62,8 @@ algo_options['local_options'] = local_options
 
 ## Run method ########################
 
-eps1 = 10
-x1 = np.ones(n)
+eps1 = 0.001
+x1 = np.zeros(n)
 
 result_local_method = local_method(x1,eps1,problem_data,algo_options)
 
@@ -79,13 +79,14 @@ x_arr = result_local_method['x_arr']
 f_arr = result_local_method['f_arr']
 eps_arr = result_local_method['eps_arr']
 eval_counter_arr = result_local_method['eval_counter_arr']
+act_arr = result_local_method['act_arr']
 
 size_x_arr = len(x_arr)
 j_max = len(eps_arr)
 
 lw = 1.5
 ms = 10
-fig, (ax1, ax2) = plt.subplots(1, 2)
+fig, (ax1, ax2, ax3) = plt.subplots(1, 3)
 
 plt.rcParams.update({
     "text.usetex": True
@@ -114,5 +115,13 @@ ax2.plot(filtered_evals,np.log10(np.array(filtered_list)),'k.-',markersize=ms,li
 
 ax2.set_title("$f(x^{j(l)}) - f(x^*)$")
 ax2.grid()
+
+# (1,3) ###############################################
+
+ax3.plot(range(j_max),act_arr,'k.-',markersize=ms,linewidth=lw)
+ax3.set_ylim(-0.1,1.1)
+ax3.grid()
+
+ax3.set_title("activity")
 
 plt.show()
