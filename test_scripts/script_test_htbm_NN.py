@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from torch import nn
 from test_functions.simple_NN import simple_NN
 from test_functions.simple_NN import visualize
+from test_functions.simple_NN import loss_unreg
 
 from htbm_py.htbm import local_method
 
@@ -23,7 +24,7 @@ class NeuralNetwork(nn.Module):
         return logits
     
 model = NeuralNetwork().to("cpu")
-problem_data = simple_NN(model,0.001)
+problem_data = simple_NN(model,0.0001)
 
 n = problem_data.x0.shape[0]
 
@@ -47,30 +48,33 @@ algo_options = {
 # Parameters for local phase
 local_options = {
     'kappa': 0.75,
-    'eps_thr': 10**(-3),
+    'eps_thr': 10**(-4),
     'j_thr': np.inf,
     'act_thr': 0.95,
     'init_N_sample': 1,
     'norm_flag': 2,
     'sp_solver': 'IPOPT',
-    'sp_solver_optns': {'tol': 10**(-10)}
+    'sp_solver_optns': {'tol': 10**(-15)}
 }
 
 algo_options['local_options'] = local_options
 
 ## Run method ########################
 
-eps1 = 0.005
-x1 = np.zeros(n) 
+np.random.seed(0)
+
+eps1 = 0.01
+# x1 = np.zeros(n) 
 # x1 = 4*np.random.rand(n)-2
-x1 = np.array([-3.31027137e-05,  1.30121360e+00,  8.83305740e-01, -6.61817766e-06,
-       -5.65883211e-01,  8.19663381e-01, -1.02478778e-05, -1.78793677e+00,
-        9.29823338e-01, -3.39167521e-05,  7.94169060e-02, -6.74663746e-01,
-       -4.80340780e-01,  1.09053386e+00, -3.21685127e+00,  1.86998978e+00,
-       -1.26323430e-01])
+x1 = np.array([-1.27376447e+00,  1.13168965e+00, -6.08025003e-01,  1.10455782e+00,
+        2.36781359e-01, -3.27091271e-01, -1.65620658e+00, -6.98339692e-01,
+       -1.09310674e-14,  7.22115710e-01, -6.70131321e-01, -9.35116274e-01,
+        1.27704645e+00, -6.81415730e-02,  3.63159272e+00,  2.39550488e+00,
+       -1.38588249e+00]) + 1e-3 * np.random.rand(n)
 
 result_local_method = local_method(x1,eps1,problem_data,algo_options)
 
+print('loss unreg: ',loss_unreg(result_local_method['best_x'],model))
 print(repr(result_local_method['best_x']))
 
 # from sys import exit
@@ -81,8 +85,15 @@ print(repr(result_local_method['best_x']))
 # x_min = np.zeros(n)
 # f_min = problem_data.oracle[0](x_min)
 
-x_min = result_local_method['best_x']
-f_min = result_local_method['best_f_val']
+x_min = np.array([-1.27376447e+00,  1.13168965e+00, -6.08025003e-01,  1.10455782e+00,
+        2.36781359e-01, -3.27091271e-01, -1.65620658e+00, -6.98339692e-01,
+       -1.09310674e-14,  7.22115710e-01, -6.70131321e-01, -9.35116274e-01,
+        1.27704645e+00, -6.81415730e-02,  3.63159272e+00,  2.39550488e+00,
+       -1.38588249e+00])
+f_min = problem_data.oracle[0](x_min)
+
+# x_min = result_local_method['best_x']
+# f_min = result_local_method['best_f_val']
 
 x_arr = result_local_method['x_arr']
 f_arr = result_local_method['f_arr']
