@@ -1,3 +1,6 @@
+# A script for approximating the growth order by randomly sampling points near
+# the minimum. (Becomes worse the larger n.)
+
 import numpy as np
 import matplotlib.pyplot as plt
 import time
@@ -10,8 +13,6 @@ from htbm_py.dgs import smallest_norm_element
 ## simple NN
 from torch import nn
 from test_functions.simple_NN import simple_NN
-from test_functions.simple_NN import loss_unreg
-from test_functions.simple_NN import visualize
 
 class NeuralNetwork(nn.Module):
     def __init__(self):
@@ -33,16 +34,20 @@ problem_data = simple_NN(model,0.001)
 
 n = problem_data.x0.shape[0]
 
-##
+## Define mininum and radius for sampling 
 
-x = np.array([-3.31027137e-05,  1.30121360e+00,  8.83305740e-01, -6.61817766e-06,
-       -5.65883211e-01,  8.19663381e-01, -1.02478778e-05, -1.78793677e+00,
-        9.29823338e-01, -3.39167521e-05,  7.94169060e-02, -6.74663746e-01,
-       -4.80340780e-01,  1.09053386e+00, -3.21685127e+00,  1.86998978e+00,
-       -1.26323430e-01])
+x = np.array([-1.2737644744674492e+00,  1.1316896534481780e+00,
+       -6.0802500315902586e-01,  1.1045578177326596e+00,
+        2.3678135927411392e-01, -3.2709127111716396e-01,
+       -1.6562065817714948e+00, -6.9833969169552712e-01,
+       0,  7.2211570940229886e-01,
+       -6.7013132103765727e-01, -9.3511627427513966e-01,
+        1.2770464483111723e+00, -6.8141573028809174e-02,
+        3.6315927217865878e+00,  2.3955048787183748e+00,
+       -1.3858824895083590e+00])
 
 N = 500
-eps = 0.0001
+eps = 0.000001
 p = 2
 
 f = problem_data.oracle[0]
@@ -51,8 +56,9 @@ f_x = f(x)
 growth_arr = np.zeros(N)
 grad_mat = np.zeros([N,n])
 
-np.random.seed(0)
+## Approximate growth order ##############
 
+np.random.seed(0)
 start_time = time.time()
 for i in range(N):
     x_sample = x + eps*(2*sample_hypersphere(n)-1)
@@ -64,6 +70,8 @@ for i in range(N):
 
 end_time = time.time()
 
+## Show results ##########################
+
 print('Min growth order: ',np.min(growth_arr))
 print('Time: ',end_time - start_time)
 print('Min. norm: ',np.min([np.linalg.norm(grad_mat[i,:]) for i in range(N)]))
@@ -72,6 +80,6 @@ print('Max. norm: ',np.max([np.linalg.norm(grad_mat[i,:]) for i in range(N)]))
 g_eps = smallest_norm_element([grad_mat[i,:] for i in range(N)])
 print('||g_eps||: ', np.linalg.norm(g_eps))
 
-[plt.plot(np.sort(grad_mat[:,i]),'o-') for i in range(n)]
+[plt.plot(grad_mat[:,i],'o-') for i in range(n)]
 
 plt.show()

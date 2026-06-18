@@ -1,8 +1,9 @@
+# A script for testing HTBM on classical test functions 
+
 import numpy as np
 import matplotlib.pyplot as plt
 
 from htbm_py.htbm import local_method
-from htbm_py.optimization_problem import OptimizationProblem
 
 ## Define problem ########################
 
@@ -35,7 +36,7 @@ problem_data = chained_CB3_I(n)
 # from test_functions.half_and_half import half_and_half
 # problem_data = half_and_half()
 
-## Set the parameters for the method ############
+## Set the parameters for the method #####
  
 # General parameters 
 algo_options = {
@@ -49,25 +50,25 @@ algo_options = {
 # Parameters for local phase
 local_options = {
     'kappa': 0.75,
-    'eps_thr': 10**(-3),
+    'eps_thr': 1e-3,
     'j_thr': np.inf,
     'act_thr': 0.95,
     'init_N_sample': 1,
     'norm_flag': 2,
     'sp_solver': 'IPOPT',
-    'sp_solver_optns': {'tol': 10**(-10)}
+    'sp_solver_optns': {'tol': 1e-10}
 }
 
 algo_options['local_options'] = local_options
 
-## Run method ########################
+## Run method ############################
 
 eps1 = 1
 x1 = np.random.rand(n)
 
 result_local_method = local_method(x1,eps1,problem_data,algo_options)
 
-## Plots ########################
+## Plots #################################
 
 x_min = np.ones(n)
 f_min = problem_data.oracle[0](x_min)
@@ -92,7 +93,7 @@ plt.rcParams.update({
     "text.usetex": True
 })
 
-# (1,1) ###############################################
+    # (1,1) ##############################
 
 diff_list = [np.linalg.norm(x_arr[j] - x_min) for j in range(size_x_arr)]
 filtered_list = [d for d in diff_list if d != 0]
@@ -104,7 +105,7 @@ ax1.plot(range(j_max),[np.log10(eps_arr[j]) for j in range(j_max)],'r.:',markers
 ax1.set_title("$\| x^j - x^* \|$")
 ax1.grid()
 
-# (1,2) ###############################################
+    # (1,2) ##############################
 
 diff_list = [val - f_min for val in f_arr]
 filtered_list = [d for d in diff_list if d > 0]
@@ -116,7 +117,7 @@ ax2.plot(filtered_evals,np.log10(np.array(filtered_list)),'k.-',markersize=ms,li
 ax2.set_title("$f(x^{j(l)}) - f(x^*)$")
 ax2.grid()
 
-# (1,3) ###############################################
+    # (1,3) ##############################
 
 ax3.plot(range(j_max),act_arr,'k.-',markersize=ms,linewidth=lw)
 ax3.set_ylim(-0.1,1.1)

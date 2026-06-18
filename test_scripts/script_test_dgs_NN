@@ -52,7 +52,7 @@ eps0 = 1
 
 algo_options = {
     'eps_arr': eps0*kappa_eps**(np.arange(j_max)), # different to Matlab because index offset
-    'delta_arr': 10**(-5) * np.ones(j_max),
+    'delta_arr': 1e-5 * np.ones(j_max),
     'rand_sample_N': 1,
     'memory_max_size': 0,
     'c': 0.5,
@@ -63,7 +63,7 @@ algo_options = {
 
 print(dgs.__doc__)
 
-## Run method ############################
+## Run DGS ###############################
 
 x_opt, f_opt, x_arr_list, fx_arr_list, eval_counter, num_sample_arr_list = dgs(problem_data,algo_options)
 

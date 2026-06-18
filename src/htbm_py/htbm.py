@@ -7,13 +7,21 @@ from htbm_py.memory import Memory
 import htbm_py.solve_subproblem_IPOPT as solve_subproblem_IPOPT
 
 def sample_hypersphere(n):
-    
+    """Returns a random (uniformly sampled) point from the n-dim. unit sphere
+    """
+
     point = np.random.normal(size=n)
     point = np.random.rand(1)**(1/n) * point/np.linalg.norm(point)
 
     return point
 
 def generate_W(x,eps,f_x,c,reusing_eps_tolerance,memory,eval_counter,problem_data,algo_options,sp_options):
+    """An implementation of the bundling Alg. 4.1 from [GU2026a]
+    
+    Includes the modification from [GU2026b] (see function htbm()) of adding the parameter c. Models
+    of order q > 2 are currently not supported.
+    """
+
     # Read problem specification
     n = x.shape[0]
     oracle = problem_data.oracle
@@ -133,6 +141,19 @@ def generate_W(x,eps,f_x,c,reusing_eps_tolerance,memory,eval_counter,problem_dat
     return z_bar, f_z_bar, mu, numsample
 
 def local_method(x1,eps1,problem_data,algo_options):
+    """ Local higher-order trust-region bundle method
+
+    An implementation of Alg. 4.2 from [GU2026a]. Models of order q > 2 are
+    currently not supported. 
+
+    For arguments and return values, see
+    https://github.com/b-gebken/higher-order-trust-region-bundle-method/blob/main/Algorithms/local_method.m
+
+    [GU2026a] Gebken, Ulbrich (2026): Superlinear convergence in nonsmooth
+    optimization via higher-order cutting-plane models
+    (https://arxiv.org/abs/2603.23236)
+    """
+
     # Read problem specification
     n = problem_data.x0.shape[0]
     oracle = problem_data.oracle

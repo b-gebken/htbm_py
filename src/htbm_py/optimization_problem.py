@@ -1,3 +1,5 @@
+# A simple class for defining optimization problems
+
 from dataclasses import dataclass
 import numpy as np
 

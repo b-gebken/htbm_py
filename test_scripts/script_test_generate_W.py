@@ -1,7 +1,8 @@
+# A script for testing the bundling mechanism in the HTBM
+
 import numpy as np
 
 from htbm_py.htbm import generate_W
-from htbm_py.optimization_problem import OptimizationProblem
 from htbm_py.memory import Memory
 
 ## Define problem ########################
@@ -29,10 +30,6 @@ problem_data = chained_CB3_I(n)
 
 # c_arr = [np.random.rand() for _ in range(k)]
 
-# g_arr = np.round(g_arr,4)
-# H_arr = np.round(H_arr,4)
-# c_arr = np.round(c_arr,4)
-
 # problem_data = lw2019_85(g_arr,H_arr,c_arr)
 
 ## half and half
@@ -51,13 +48,13 @@ algo_options = {
     'disp_flag': 2,
     'memory_max_size': 10000,
     'kappa': 0.75,
-    'eps_thr': 10**(-3),
+    'eps_thr': 1e-3,
     'j_thr': np.inf,
     'act_thr': 0.95,
     'init_N_sample': 1,
     'norm_flag': 2,
     'sp_solver': 'IPOPT',
-    'sp_solver_optns': {'tol': 10**(-10)}
+    'sp_solver_optns': {'tol': 1e-10}
 }
 
 mem = Memory(algo_options['memory_max_size'])
@@ -65,10 +62,10 @@ eval_counter = np.zeros(algo_options['q']+1)
 
 z_bar, f_z_bar, mu, numsample = generate_W(
     x=x,
-    eps=2,
+    eps=0.1,
     f_x=problem_data.oracle[0](x),
     c=np.inf,
-    reusing_eps_tolerance=10**(-7),
+    reusing_eps_tolerance=1e-7,
     memory=mem,
     eval_counter=eval_counter,
     problem_data=problem_data,

@@ -44,13 +44,13 @@ algo_options = {
 # Parameters for local phase
 local_options = {
     'kappa': 0.75,
-    'eps_thr': 10**(-4),
+    'eps_thr': 1e-4,
     'j_thr': np.inf,
     'act_thr': 0.95,
     'init_N_sample': 1,
     'norm_flag': 2,
     'sp_solver': 'IPOPT',
-    'sp_solver_optns': {'tol': 10**(-15)}
+    'sp_solver_optns': {'tol': 1e-15}
 }
 
 algo_options['local_options'] = local_options

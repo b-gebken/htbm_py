@@ -1,3 +1,5 @@
+# Generates an oracle for the loss function of a simple neural network.
+
 import torch
 from torch import nn
 from torch.func import functional_call
@@ -46,8 +48,6 @@ def simple_NN(model,reg_param):
     n = 17
     x0 = np.ones(n)
 
-    # loss_fn = nn.MSELoss(reduction='mean')
-
     problem_data = OptimizationProblem(
         oracle=[f,grad_f,hess_f],
         x0=x0
@@ -67,14 +67,19 @@ def unpack(x_torch, model):
     return params
 
 def loss_unreg(x,model):
+    """Returns the unregularized loss value.
+    """
+    
     x_torch = torch.tensor(x, dtype=torch.float64, requires_grad=True)
     params = unpack(x_torch,model)
     outputs = functional_call(model, params, (data_x.reshape(N_data,1),)).reshape(N_data)
 
-    # return loss_fn(outputs,data_y,x_torch).detach().cpu().numpy() - reg_param*sum(np.abs(x))
     return loss_fn(outputs,data_y,x_torch,0).detach().cpu().numpy()
 
 def visualize(x, model):
+    """Visualize the model and the data.
+    """
+
     x_torch = torch.tensor(x, dtype=torch.float64, requires_grad=False)
 
     N_plot = 1000
@@ -87,9 +92,6 @@ def visualize(x, model):
     ms = 10
     plt.plot(plot_x,outputs_plot,'-',markersize=ms,linewidth=lw)
     plt.plot(data_x,data_y,'r.-',markersize=ms,linewidth=lw)
-
-    # plt.title(loss_fn_x(x_torch))
-    # print(loss_fn_x(x_torch))
 
     plt.show()
 

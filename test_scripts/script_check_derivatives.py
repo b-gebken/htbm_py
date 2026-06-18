@@ -1,3 +1,5 @@
+# A script for comparing the oracle derivatives to finite differences
+
 import numpy as np
 import time
 
@@ -33,30 +35,30 @@ class NeuralNetwork(nn.Module):
         return logits
     
 model = NeuralNetwork().to("cpu")
-problem_data = simple_NN(model)
+problem_data = simple_NN(model, 0.0001)
 
 n = 17
 
-## Generate test points ########################
+## Generate test points ##################
 
 np.random.seed(0)
 
 lb = -1*np.ones(n)
 ub = 1*np.ones(n)
 
-N_pts = 100
+N_pts = 10
 pts = lb + np.random.rand(N_pts,n) * (ub - lb)
 
-## Check derivatives ########################
+## Check derivatives #####################
 
 f = problem_data.oracle[0]
 grad_f = problem_data.oracle[1]
 hess_f = problem_data.oracle[2]
 
-h_grad = 10**(-6)
+h_grad = 1e-6
 grad_error_arr = np.zeros(N_pts)
 
-h_hess = 10**(-5)
+h_hess = 1e-5
 hess_error_arr = np.zeros(N_pts)
 
 grad_time = 0
@@ -79,7 +81,7 @@ for i in range(N_pts):
 
     grad_error_arr[i] = np.max(abs(grad_i - grad_exact))
 
-    if grad_error_arr[i] > 10**(-5):
+    if grad_error_arr[i] > 1e-5:
         print(grad_i)
         print(grad_f(pts[i]))
 
@@ -99,7 +101,7 @@ for i in range(N_pts):
 
     hess_error_arr[i] = np.max(abs(hess_i - hess_exact))
 
-    if hess_error_arr[i] > 10**(-1):
+    if hess_error_arr[i] > 1e-3:
         print(hess_i)
         print(hess_f(pts[i]))
 

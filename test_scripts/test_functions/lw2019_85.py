@@ -1,3 +1,6 @@
+# Generates an oracle for the test function (8.5) from [Lewis, Wylie (2019), "A
+# simple Newton method for local nonsmooth optimization"].
+
 import numpy as np
 from htbm_py.optimization_problem import OptimizationProblem
 

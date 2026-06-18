@@ -1,3 +1,7 @@
+# Generates an oracle for the test function Chained CB3 I. (See, e.g., [Haarala
+# (2004), "Large-Scale Nonsmooth Optimization, Variable Metric Bundle Method
+# with Limited Memory"])
+
 import numpy as np
 from htbm_py.optimization_problem import OptimizationProblem
 

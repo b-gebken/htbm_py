@@ -1,3 +1,4 @@
+# A script for testing the solution of the HTBM subproblem via IPOPT 
 
 import numpy as np
 import htbm_py.solve_subproblem_IPOPT as solve_subproblem_IPOPT
@@ -14,7 +15,7 @@ W_hess = [np.array([[-0.72,0.34],[0.34,0.58]]),
 x = np.array([-0.22,0.31])
 eps = 0.75
 
-sp_solver_options = { 'tol' : 10**-10 }
+sp_solver_options = { 'tol' : 1e-10 }
 
 z_bar, theta, mu = solve_subproblem_IPOPT.solve(W,W_f,W_grad,W_hess,x,eps,sp_solver_options)
 

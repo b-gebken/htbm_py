@@ -1,3 +1,6 @@
+# Generates an oracle for the test function half-and-half from Section 5.5 in
+# [Lewis, Overton (2008), "Nonsmooth optimization via BFGS"]
+
 import numpy as np
 from htbm_py.optimization_problem import OptimizationProblem
 

@@ -1,3 +1,6 @@
+# A simple class for handling the memorization of sample points and oracle
+# values.
+
 class Memory:
     def __init__(self, max_size):
         self.max_size = max_size

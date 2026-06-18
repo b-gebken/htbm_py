@@ -2,6 +2,12 @@ import numpy as np
 import time
 
 def linesearch_armijo_wolfe(x,p,f_x,grad_f_x,problem_data,algo_options):
+    """Inexact Wolfe line search
+
+    The inexact Wolfe line search from [Lewis, Overton (2013)], Alg. 4.6,
+    without differentiability check. A stopping criterion is added for numerical
+    reasons, which stops when the step length becomes too small.
+    """
 
     f = problem_data.oracle[0]
     grad_f = problem_data.oracle[1]
@@ -44,6 +50,13 @@ def linesearch_armijo_wolfe(x,p,f_x,grad_f_x,problem_data,algo_options):
     return t, f_xtp, grad_f_xtp
 
 def bfgs(problem_data,algo_options):
+    """BFGS method
+
+    A simple implementation of the BFGS method (see, e.g., Alg. 6.1 in [Nocedal,
+    Wright (2006)]). For the BFGS update, the formula (2.2) from [Lewis, Overton
+    (2013)] is used. The stopping criteria are the step length being too small
+    or the descent being too shallow.
+    """
 
     # Read inputs
     f = problem_data.oracle[0]
@@ -74,6 +87,7 @@ def bfgs(problem_data,algo_options):
         print('Running BFGS method...')
         start_time = time.time()
         print_iter_arr = np.arange(0,N_iter,200)
+    
     # Loop over k
     for k in range(N_iter):
 

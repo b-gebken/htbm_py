@@ -1,7 +1,6 @@
 import cyipopt
 import numpy as np
 
-# Solving the subproblem via IPOPT
 class HtbmSubproblem:
 
     def __init__(self,W,W_f,W_grad,W_hess,x,eps):
@@ -16,15 +15,12 @@ class HtbmSubproblem:
         self.n = W[0].shape[0]
 
     def objective(self, ztheta):
-        """Returns the scalar value of the objective given x."""
         return ztheta[self.n]
 
     def gradient(self, ztheta):
-        """Returns the gradient of the objective with respect to x."""
         return np.concatenate([np.zeros(self.n),[1]])
 
     def constraints(self, ztheta):
-        """Returns the constraints."""
         c = np.zeros(self.k+1)
 
         for i in range(self.k):
@@ -40,7 +36,6 @@ class HtbmSubproblem:
         return c
 
     def jacobian(self, ztheta):
-        """Returns the Jacobian of the constraints with respect to x."""
         J = np.zeros([self.k+1,self.n+1])
 
         for i in range(self.k):
@@ -55,7 +50,6 @@ class HtbmSubproblem:
         return np.nonzero(np.ones([self.k+1,self.n+1]))
 
     def hessian(self, ztheta, lagrange, obj_factor):
-        """Returns the non-zero values of the Hessian."""
 
         H = np.zeros([self.n+1,self.n+1])
         for i in range(self.k):
@@ -67,15 +61,23 @@ class HtbmSubproblem:
         return H[row, col]
 
     def hessianstructure(self):
-        """Returns the row and column indices for non-zero values of the
-        Hessian."""
 
         return np.nonzero(np.tril(np.ones([self.n+1,self.n+1])))
 
 def solve(W,W_f,W_grad,W_hess,x,eps,sp_solver_options):
+    """Function for solving the subproblem (3.5) in [GU2026a] via IPOPT
+
+    For details on IPOPT, see
+    [Wächter, Biegler (2006), "On the Implementation of a Primal-Dual Interior
+    Point Filter Line Search Algorithm for Large-Scale Nonlinear Programming"]
+
+    [GU2026a] Gebken, Ulbrich (2026): Superlinear convergence in nonsmooth
+    optimization via higher-order cutting-plane models
+    (https://arxiv.org/abs/2603.23236)
+    """
 
     k = len(W)
-    n = W[0].shape[0]
+    n = x.shape[0]
 
     lb = np.concatenate([x - eps, [-np.inf]])
     ub = np.concatenate([x + eps, [np.inf]])
@@ -85,6 +87,9 @@ def solve(W,W_f,W_grad,W_hess,x,eps,sp_solver_options):
 
     problem_obj = HtbmSubproblem(W,W_f,W_grad,W_hess,x,eps)
 
+    # Define initial point for IPOPT. (x is modified to avoid an error in the
+    # restoration phase of IPOPT, which was likely caused by the gradient of the
+    # eps-ball constraint being zero in x.)  
     x_mod = x.copy()
     x_mod[0] += 0.5*eps
     init_pt = np.concatenate([x_mod,[np.max(problem_obj.constraints(np.concatenate([x_mod,[0]]))) + 1]])

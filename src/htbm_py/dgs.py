@@ -9,9 +9,9 @@ from htbm_py.memory import Memory
 from cvxopt import matrix, solvers
 
 solvers.options['show_progress'] = False
-solvers.options['abstol'] = 10**(-15)
-solvers.options['reltol'] = 10**(-15)
-solvers.options['feastol'] = 10**(-15)
+solvers.options['abstol'] = 1e-15
+solvers.options['reltol'] = 1e-15
+solvers.options['feastol'] = 1e-15
 
 def smallest_norm_element(grad_list):
     """Compute element with the smallest norm in convex hull of grad_list
@@ -56,7 +56,7 @@ def descent_direction(x,f_x,f,subgrad_f,eps,delta,c,rand_sample_N,memory,eval_co
         memory.add(sample_pts,W)
 
     # Add subgradients at sample points in B_eps(x) from memory
-    reusing_eps_tolerance = 10**(-7)
+    reusing_eps_tolerance = 1e-7
     if (memory.max_size > 0) and (len(memory.sample_pts) > 0):
         inds = norm(np.stack(memory.sample_pts) - x,axis=1,ord=2) <= eps + reusing_eps_tolerance
     
