@@ -1,3 +1,5 @@
+# A script for training a neural network via HTBM
+# %%
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -28,13 +30,7 @@ problem_data = simple_NN(model,0.0001)
 
 n = problem_data.x0.shape[0]
 
-# np.random.seed(0)
-# x = np.random.rand(17)
-# print(problem_data.oracle[0](x))
-# print(problem_data.oracle[1](x))
-# print(problem_data.oracle[2](x))
-
-## Set the parameters for the method ############
+## Set the parameters for the method #####
  
 # General parameters 
 algo_options = {
@@ -59,37 +55,34 @@ local_options = {
 
 algo_options['local_options'] = local_options
 
-## Run method ########################
+## Initial data ##########################
 
-np.random.seed(0)
+# Approximated minimum, used to test local convergence
+x_min = np.array([-1.2737644744674492e+00,  1.1316896534481780e+00,
+       -6.0802500315902586e-01,  1.1045578177326596e+00,
+        2.3678135927411392e-01, -3.2709127111716396e-01,
+       -1.6562065817714948e+00, -6.9833969169552712e-01,
+       0,  7.2211570940229886e-01,
+       -6.7013132103765727e-01, -9.3511627427513966e-01,
+        1.2770464483111723e+00, -6.8141573028809174e-02,
+        3.6315927217865878e+00,  2.3955048787183748e+00,
+       -1.3858824895083590e+00])
 
 eps1 = 0.01
-# x1 = np.zeros(n) 
-# x1 = 4*np.random.rand(n)-2
-x1 = np.array([-1.27376447e+00,  1.13168965e+00, -6.08025003e-01,  1.10455782e+00,
-        2.36781359e-01, -3.27091271e-01, -1.65620658e+00, -6.98339692e-01,
-       -1.09310674e-14,  7.22115710e-01, -6.70131321e-01, -9.35116274e-01,
-        1.27704645e+00, -6.81415730e-02,  3.63159272e+00,  2.39550488e+00,
-       -1.38588249e+00]) + 1e-3 * np.random.rand(n)
+np.random.seed(0)
+x1 = x_min + 1e-3 * np.random.rand(n)
+
+## Run method ############################
 
 result_local_method = local_method(x1,eps1,problem_data,algo_options)
 
-print('loss unreg: ',loss_unreg(result_local_method['best_x'],model))
-print(repr(result_local_method['best_x']))
+print('Unregularized loss: ',loss_unreg(result_local_method['best_x'],model))
 
-# from sys import exit
-# exit()
+# np.set_printoptions(precision=20)
+# print(repr(result_local_method['best_x']))
 
-## Plot optimization results ########################
+## Plot optimization results #############
 
-# x_min = np.zeros(n)
-# f_min = problem_data.oracle[0](x_min)
-
-x_min = np.array([-1.27376447e+00,  1.13168965e+00, -6.08025003e-01,  1.10455782e+00,
-        2.36781359e-01, -3.27091271e-01, -1.65620658e+00, -6.98339692e-01,
-       -1.09310674e-14,  7.22115710e-01, -6.70131321e-01, -9.35116274e-01,
-        1.27704645e+00, -6.81415730e-02,  3.63159272e+00,  2.39550488e+00,
-       -1.38588249e+00])
 f_min = problem_data.oracle[0](x_min)
 
 # x_min = result_local_method['best_x']
@@ -107,13 +100,12 @@ j_max = len(eps_arr)
 
 lw = 1.5
 ms = 10
-# fig, (ax1, ax2, ax3, ax4, ax5,) = plt.subplots(2, 3)
 
 plt.rcParams.update({
     "text.usetex": True
 })
 
-# (1,1) ###############################################
+    # (1,1) ##############################
 
 diff_list = [np.linalg.norm(x_arr[j] - x_min) for j in range(size_x_arr)]
 filtered_list = [d for d in diff_list if d != 0]
@@ -126,7 +118,7 @@ ax1.plot(range(j_max),[np.log10(eps_arr[j]) for j in range(j_max)],'r.:',markers
 ax1.set_title("$\| x^j - x^* \|$")
 ax1.grid()
 
-# (1,2) ###############################################
+    # (1,2) ##############################
 
 diff_list = [val - f_min for val in f_arr]
 filtered_list = [d for d in diff_list if d > 0]
@@ -139,7 +131,7 @@ ax2.plot(filtered_evals,np.log10(np.array(filtered_list)),'k.-',markersize=ms,li
 ax2.set_title("$f(x^{j(l)}) - f(x^*)$")
 ax2.grid()
 
-# (1,3) ###############################################
+    # (1,3) ##############################
 
 ax3 = plt.subplot(2,3,3)
 ax3.plot(range(j_max+1),np.log10(f_arr),'k.-',markersize=ms,linewidth=lw)
@@ -147,14 +139,15 @@ ax3.plot(range(j_max+1),np.log10(f_arr),'k.-',markersize=ms,linewidth=lw)
 ax3.set_title("$f(x^j)$")
 ax3.grid()
 
-# (2,1) ###############################################
+    # (2,1) ##############################
 
 ax4 = plt.subplot(2,3,4)
 ax4.plot(range(j_max),numsample_arr,'k.-',markersize=ms,linewidth=lw)
+ax4.grid()
 
 ax4.set_title("numsample")
 
-# (2,2) ###############################################
+    # (2,2) ##############################
 
 ax5 = plt.subplot(2,3,5)
 ax5.plot(range(j_max),act_arr,'k.-',markersize=ms,linewidth=lw)
@@ -163,8 +156,18 @@ ax5.grid()
 
 ax5.set_title("activity")
 
+    # (2,3) ##############################
+
+ax6 = plt.subplot(2,3,6)
+# ax6.plot(range(j_max+1),np.log10([(f_arr[i] - f_min)/(np.linalg.norm(x_arr[i] - x_min)**2) for i in range(j_max+1)]),'k.-',markersize=ms,linewidth=lw)
+ax6.plot([np.log10(np.linalg.norm(x_arr[j] - x_min)) for j in range(j_max+1)],np.log10([(f_arr[j] - f_min)/(np.linalg.norm(x_arr[j] - x_min)**2) for j in range(j_max+1)]),'k.-',markersize=ms,linewidth=lw)
+ax6.grid()
+
+ax6.set_title("log10 growth param.")
+
 plt.show()
 
-## Visualize NN ########################
+## Visualize NN ##########################
 
 visualize(result_local_method['best_x'],model)
+
