@@ -1,7 +1,6 @@
 # A script for testing the function descent_direction from htbm_py.dgs
 
 import numpy as np
-import matplotlib.pyplot as plt
 
 from htbm_py.dgs import descent_direction
 from htbm_py.memory import Memory
