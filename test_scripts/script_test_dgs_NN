@@ -28,7 +28,10 @@ class NeuralNetwork(nn.Module):
         return logits
     
 model = NeuralNetwork().to("cpu")
-problem_data = simple_NN(model,0.0001)
+
+reg_param = 0.0001
+N_data = 20
+problem_data = simple_NN(model,reg_param,N_data)
 
 n = problem_data.x0.shape[0]
 
@@ -67,7 +70,7 @@ x_opt, f_opt, x_arr_list, fx_arr_list, eval_counter, num_sample_arr_list = dgs(p
 
 ## Plots #################################
 
-print('loss unreg: ',loss_unreg(x_opt,model))
+print('loss unreg: ',loss_unreg(x_opt,model,N_data))
 
 numiter_arr = [len(fx_arr) for fx_arr in fx_arr_list]
 num_total_iter = sum(numiter_arr)
@@ -108,4 +111,4 @@ plt.show()
 
 print('x_opt = ',repr(x_opt))
 
-visualize(x_opt,model)
+visualize(x_opt,model,N_data)

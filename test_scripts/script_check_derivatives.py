@@ -35,9 +35,12 @@ class NeuralNetwork(nn.Module):
         return logits
     
 model = NeuralNetwork().to("cpu")
-problem_data = simple_NN(model, 0.0001)
 
-n = 17
+reg_param = 0.0001
+N_data = 20
+problem_data = simple_NN(model,reg_param,N_data)
+
+n = problem_data.x0.shape[0]
 
 ## Generate test points ##################
 
@@ -105,8 +108,6 @@ for i in range(N_pts):
         print(hess_i)
         print(hess_f(pts[i]))
 
-# print('Grad errors: ',grad_error_arr)
-# print('Hess errors: ',hess_error_arr)
 print('Max. grad error: ',np.max(grad_error_arr))
 print('Max. hess error: ',np.max(hess_error_arr))
 print('Avg. grad eval. time: ',grad_time/N_pts)

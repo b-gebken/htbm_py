@@ -1,5 +1,5 @@
 # Generates an oracle for the loss function of a simple neural network.
-
+# %%
 import torch
 from torch import nn
 from torch.func import functional_call
@@ -10,13 +10,13 @@ from htbm_py.optimization_problem import OptimizationProblem
 
 import matplotlib.pyplot as plt
 
-N_data = 20
-data_x = torch.linspace(-1,1,N_data,dtype=torch.float64)
-data_y = torch.sin(torch.pi * torch.exp(data_x)) - data_x
-
+data_fn = lambda var : torch.sin(torch.pi * torch.exp(var)) - var
 loss_fn = lambda a,b,x,reg_param : 1/a.shape[0] * sum((a - b)**2) + reg_param*sum(x.abs())
 
-def simple_NN(model,reg_param):
+def simple_NN(model,reg_param,N_data):
+
+    data_x = torch.linspace(-1,1,N_data,dtype=torch.float64)
+    data_y = data_fn(data_x)
 
     def f(x):
         x_torch = torch.tensor(x, dtype=torch.float64, requires_grad=True)
@@ -45,7 +45,7 @@ def simple_NN(model,reg_param):
         hess = torch.autograd.functional.hessian(loss_fn_x, x_torch)
         return hess
 
-    n = 17
+    n = sum(p.numel() for p in model.parameters())
     x0 = np.ones(n)
 
     problem_data = OptimizationProblem(
@@ -66,9 +66,12 @@ def unpack(x_torch, model):
 
     return params
 
-def loss_unreg(x,model):
+def loss_unreg(x,model,N_data):
     """Returns the unregularized loss value.
     """
+
+    data_x = torch.linspace(-1,1,N_data,dtype=torch.float64)
+    data_y = data_fn(data_x)
     
     x_torch = torch.tensor(x, dtype=torch.float64, requires_grad=True)
     params = unpack(x_torch,model)
@@ -76,9 +79,12 @@ def loss_unreg(x,model):
 
     return loss_fn(outputs,data_y,x_torch,0).detach().cpu().numpy()
 
-def visualize(x, model):
+def visualize(x,model,N_data):
     """Visualize the model and the data.
     """
+
+    data_x = torch.linspace(-1,1,N_data,dtype=torch.float64)
+    data_y = data_fn(data_x)
 
     x_torch = torch.tensor(x, dtype=torch.float64, requires_grad=False)
 

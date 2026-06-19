@@ -30,7 +30,10 @@ class NeuralNetwork(nn.Module):
         return logits
     
 model = NeuralNetwork().to("cpu")
-problem_data = simple_NN(model,0.001)
+
+reg_param = 0.0001
+N_data = 20
+problem_data = simple_NN(model,reg_param,N_data)
 
 n = problem_data.x0.shape[0]
 

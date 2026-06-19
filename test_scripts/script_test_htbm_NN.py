@@ -26,7 +26,10 @@ class NeuralNetwork(nn.Module):
         return logits
     
 model = NeuralNetwork().to("cpu")
-problem_data = simple_NN(model,0.0001)
+
+reg_param = 0.0001
+N_data = 20
+problem_data = simple_NN(model,reg_param,N_data)
 
 n = problem_data.x0.shape[0]
 
@@ -76,7 +79,7 @@ x1 = x_min + 1e-3 * np.random.rand(n)
 
 result_local_method = local_method(x1,eps1,problem_data,algo_options)
 
-print('Unregularized loss: ',loss_unreg(result_local_method['best_x'],model))
+print('Unregularized loss: ',loss_unreg(result_local_method['best_x'],model,N_data))
 
 # np.set_printoptions(precision=20)
 # print(repr(result_local_method['best_x']))
@@ -169,5 +172,5 @@ plt.show()
 
 ## Visualize NN ##########################
 
-visualize(result_local_method['best_x'],model)
+visualize(result_local_method['best_x'],model,N_data)
 

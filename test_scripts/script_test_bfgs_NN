@@ -26,7 +26,10 @@ class NeuralNetwork(nn.Module):
         return logits
     
 model = NeuralNetwork().to("cpu")
-problem_data = simple_NN(model,0.0001)
+
+reg_param = 0.0001
+N_data = 20
+problem_data = simple_NN(model,reg_param,N_data)
 
 n = problem_data.x0.shape[0]
 
@@ -64,9 +67,9 @@ result_bfgs = bfgs(problem_data,algo_options)
 x_arr = result_bfgs['x_arr']
 print('x_final = ',repr(x_arr[-1]))
 
-print('Unregularized loss: ',loss_unreg(x_arr[-1],model))
+print('Unregularized loss: ',loss_unreg(x_arr[-1],model,N_data))
 
 # eigvals, eigvecs = np.linalg.eig(result_bfgs['H_arr'][-1])
 # print('Sorted Eigenvalues: ',np.sort(eigvals))
 
-visualize(x_arr[-1],model)
+visualize(x_arr[-1],model,N_data)
