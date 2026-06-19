@@ -8,13 +8,13 @@ from htbm_py.memory import Memory
 ## Define problem ########################
 
 ## chained_CB3_I
-from test_functions.chained_CB3_I import chained_CB3_I
+from htbm_py.test_functions.chained_CB3_I import chained_CB3_I
 n = 5
 problem_data = chained_CB3_I(n)
 
 ## LW2019_85
 # np.random.seed(0)
-# from test_functions.lw2019_85 import lw2019_85
+# from htbm_py.test_functions.lw2019_85 import lw2019_85
 # n = 5
 # k = 3
 # lambd = np.random.rand(k)

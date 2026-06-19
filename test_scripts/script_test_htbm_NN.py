@@ -4,9 +4,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from torch import nn
-from test_functions.loss_NN_lsq import loss_NN_lsq
-from test_functions.loss_NN_lsq import visualize
-from test_functions.loss_NN_lsq import loss_unreg
+from htbm_py.test_functions.loss_NN_lsq import loss_NN_lsq
+from htbm_py.test_functions.loss_NN_lsq import visualize
+from htbm_py.test_functions.loss_NN_lsq import loss_unreg
 
 from htbm_py.htbm import local_method
 

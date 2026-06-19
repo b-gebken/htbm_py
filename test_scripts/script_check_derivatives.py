@@ -8,7 +8,7 @@ from htbm_py.optimization_problem import OptimizationProblem
 ## Define problem ########################
 
 ### chained_CB3_I
-# from test_functions.chained_CB3_I import chained_CB3_I
+# from htbm_py.test_functions.chained_CB3_I import chained_CB3_I
 # n = 4
 # problem_data = chained_CB3_I(n)
 
@@ -17,7 +17,7 @@ from torch import nn
 
 import numpy as np
 
-from test_functions.loss_NN_lsq import loss_NN_lsq
+from htbm_py.test_functions.loss_NN_lsq import loss_NN_lsq
 
 class NeuralNetwork(nn.Module):
     def __init__(self):

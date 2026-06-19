@@ -12,7 +12,7 @@ from htbm_py.dgs import smallest_norm_element
 
 ## loss_NN_lsq
 from torch import nn
-from test_functions.loss_NN_lsq import loss_NN_lsq
+from htbm_py.test_functions.loss_NN_lsq import loss_NN_lsq
 
 class NeuralNetwork(nn.Module):
     def __init__(self):
