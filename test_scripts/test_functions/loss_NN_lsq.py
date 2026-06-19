@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 data_fn = lambda var : torch.sin(torch.pi * torch.exp(var)) - var
 loss_fn = lambda a,b,x,reg_param : 1/a.shape[0] * sum((a - b)**2) + reg_param*sum(x.abs())
 
-def simple_NN(model,reg_param,N_data):
+def loss_NN_lsq(model,reg_param,N_data):
 
     data_x = torch.linspace(-1,1,N_data,dtype=torch.float64)
     data_y = data_fn(data_x)

@@ -4,9 +4,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from torch import nn
-from test_functions.simple_NN import simple_NN
-from test_functions.simple_NN import visualize
-from test_functions.simple_NN import loss_unreg
+from test_functions.loss_NN_lsq import loss_NN_lsq
+from test_functions.loss_NN_lsq import visualize
+from test_functions.loss_NN_lsq import loss_unreg
 
 from htbm_py.htbm import local_method
 
@@ -29,7 +29,7 @@ model = NeuralNetwork().to("cpu")
 
 reg_param = 0.0001
 N_data = 20
-problem_data = simple_NN(model,reg_param,N_data)
+problem_data = loss_NN_lsq(model,reg_param,N_data)
 
 n = problem_data.x0.shape[0]
 
