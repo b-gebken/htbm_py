@@ -31,7 +31,7 @@ def smallest_norm_element(grad_list):
 
     return np.squeeze(grad_mat @ np.array(sol['x']))
 
-def descent_direction(x,f_x,f,subgrad_f,eps,delta,c,rand_sample_N,memory,eval_counter):
+def descent_direction(x,f_x,f,subgrad_f,eps,delta,c,rand_sample_N,memory,eval_counter,disp_flag):
     """Compute descent direction
     
     Algorithm 2 in [GP2021] (or Algorithm 4.2 in [G2022]) combined with
@@ -74,8 +74,9 @@ def descent_direction(x,f_x,f,subgrad_f,eps,delta,c,rand_sample_N,memory,eval_co
         if norm(v,ord=2) <= delta:
             f_eps_v = np.nan
             
-            # print('        ...found v with ||v|| = ',norm(v,ord=2),' for |W| = ',len(W))
-            # print('        Smallest gradient norm: ',np.min([norm(xi,ord=2) for xi in W]))
+            if disp_flag >= 3:
+                print('                ...found v with ||v|| = ',norm(v,ord=2),' for |W| = ',len(W))
+                print('                Smallest gradient norm: ',np.min([norm(xi,ord=2) for xi in W]))
 
             break
 
@@ -211,7 +212,7 @@ def dgs(problem_data,algo_options):
                 print('                Computing descent direction...')
 
             # Step 2 in [G2024a]
-            v, f_eps_v, num_sample = descent_direction(x_arr[i],f_xi,f,subgrad_f,eps_arr[j],delta_arr[j],c,rand_sample_N,memory,eval_counter)
+            v, f_eps_v, num_sample = descent_direction(x_arr[i],f_xi,f,subgrad_f,eps_arr[j],delta_arr[j],c,rand_sample_N,memory,eval_counter,disp_flag)
 
             if (disp_flag >= 3) and (np.mod(i+1,100) == 0):
                 print('                    ...done!')
