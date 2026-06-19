@@ -44,8 +44,9 @@ c = 0.9
 rand_sample_N = 1
 memory = Memory(1000)
 eval_counter = np.zeros(2)
+disp_flag = 3
 
-v, f_eps_v, num_sample = descent_direction(x,f_x,f,subgrad_f,eps,delta,c,rand_sample_N,memory,eval_counter)
+v, f_eps_v, num_sample = descent_direction(x,f_x,f,subgrad_f,eps,delta,c,rand_sample_N,memory,eval_counter,disp_flag)
 
 print('||v|| = ',np.linalg.norm(v,ord=2))
 print('eval_counter = ',eval_counter)
