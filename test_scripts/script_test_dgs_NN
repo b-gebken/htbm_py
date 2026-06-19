@@ -61,8 +61,6 @@ algo_options = {
     'disp_flag': 3
 }
 
-print(dgs.__doc__)
-
 ## Run DGS ###############################
 
 x_opt, f_opt, x_arr_list, fx_arr_list, eval_counter, num_sample_arr_list = dgs(problem_data,algo_options)
