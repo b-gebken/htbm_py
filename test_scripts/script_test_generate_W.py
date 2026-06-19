@@ -33,7 +33,7 @@ problem_data = chained_CB3_I(n)
 # problem_data = lw2019_85(g_arr,H_arr,c_arr)
 
 ## half and half
-# from test_functions.half_and_half import half_and_half
+# from htbm_py.test_functions.half_and_half import half_and_half
 # n = 8
 # problem_data = half_and_half()
 
