@@ -49,7 +49,7 @@ def descent_direction(x,f_x,f,subgrad_f,eps,delta,c,rand_sample_N,memory,eval_co
 
     # Random initial approximation
     for k in range(1,rand_sample_N):
-        sample_pts.append(sample_hypersphere(n))
+        sample_pts.append(eps * sample_hypersphere(n) + x)
         W.append(subgrad_f(sample_pts[k])); eval_counter[1] += 1
 
     if memory.max_size > 0:

@@ -68,7 +68,7 @@ def generate_W(x,eps,f_x,c,reusing_eps_tolerance,memory,eval_counter,problem_dat
     oracle_W.append([f_x] + [h(x) for h in oracle[1:]])
 
     for k in range(1,init_N_sample):
-        W.append(sample_hypersphere(n))
+        W.append(eps * sample_hypersphere(n) + x)
         oracle_W.append([h(W[N_reused + k]) for h in oracle])
 
     N_W = N_reused + init_N_sample
