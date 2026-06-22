@@ -79,7 +79,7 @@ def loss_unreg(x,model,N_data):
 
     return loss_fn(outputs,data_y,x_torch,0).detach().cpu().numpy()
 
-def visualize(x,model,N_data):
+def visualize(x,model,N_data,**kwargs):
     """Visualize the model and the data.
     """
 
@@ -96,8 +96,12 @@ def visualize(x,model,N_data):
 
     lw = 1.5
     ms = 10
-    plt.plot(plot_x,outputs_plot,'-',markersize=ms,linewidth=lw)
-    plt.plot(data_x,data_y,'r.-',markersize=ms,linewidth=lw)
 
-    plt.show()
+    if 'axes' in kwargs.keys():
+        kwargs.get('axes').plot(plot_x,outputs_plot,'-',markersize=ms,linewidth=lw)
+        kwargs.get('axes').plot(data_x,data_y,'r.-',markersize=ms,linewidth=lw)
+    else:
+        plt.plot(plot_x,outputs_plot,'-',markersize=ms,linewidth=lw)
+        plt.plot(data_x,data_y,'r.-',markersize=ms,linewidth=lw)
+        plt.show()
 
