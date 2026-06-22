@@ -99,9 +99,9 @@ def visualize(x,model,N_data,**kwargs):
 
     if 'axes' in kwargs.keys():
         kwargs.get('axes').plot(plot_x,outputs_plot,'-',markersize=ms,linewidth=lw)
-        kwargs.get('axes').plot(data_x,data_y,'r.-',markersize=ms,linewidth=lw)
+        kwargs.get('axes').plot(data_x,data_y,'r.--',markersize=ms,linewidth=lw)
     else:
         plt.plot(plot_x,outputs_plot,'-',markersize=ms,linewidth=lw)
-        plt.plot(data_x,data_y,'r.-',markersize=ms,linewidth=lw)
+        plt.plot(data_x,data_y,'r.--',markersize=ms,linewidth=lw)
         plt.show()
 
