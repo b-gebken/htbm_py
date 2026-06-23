@@ -47,14 +47,6 @@ def descent_direction(x,f_x,f,subgrad_f,eps,delta,c,rand_sample_N,memory,eval_co
     sample_pts = [x]
     W = [subgrad_f(x)]; eval_counter[1] += 1
 
-    # Random initial approximation
-    for k in range(1,rand_sample_N):
-        sample_pts.append(eps * sample_hypersphere(n) + x)
-        W.append(subgrad_f(sample_pts[k])); eval_counter[1] += 1
-
-    if memory.max_size > 0:
-        memory.add(sample_pts,W)
-
     # Add subgradients at sample points in B_eps(x) from memory
     reusing_eps_tolerance = 1e-7
     if (memory.max_size > 0) and (len(memory.sample_pts) > 0):
@@ -65,6 +57,21 @@ def descent_direction(x,f_x,f,subgrad_f,eps,delta,c,rand_sample_N,memory,eval_co
 
         sample_pts.extend(sample_pts_mem)
         W.extend(W_mem)
+
+    # Random initial approximation
+    if rand_sample_N > 1:
+        sample_pts_rnd = []
+        W_rnd = []
+        
+        for k in range(1,rand_sample_N):
+            sample_pts_rnd.append(eps * sample_hypersphere(n) + x)
+            W_rnd.append(subgrad_f(sample_pts[k])); eval_counter[1] += 1
+
+        sample_pts.extend(sample_pts_rnd)
+        W.extend(W_rnd)
+
+        if memory.max_size > 0:
+            memory.add(sample_pts_rnd,W_rnd)
     
     while True:
         # Step 2 in [GP2021] (Compute direction based on W)
