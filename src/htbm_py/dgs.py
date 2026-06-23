@@ -102,7 +102,7 @@ def descent_direction(x,f_x,f,subgrad_f,eps,delta,c,rand_sample_N,memory,eval_co
                     sample_pts.append(x + t*v)
                     W.append(xi)
 
-                    if memory.max_size:
+                    if memory.max_size > 0:
                         memory.add([x + t*v], [xi])
 
                     break
