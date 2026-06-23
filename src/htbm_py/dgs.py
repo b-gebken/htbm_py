@@ -43,12 +43,8 @@ def descent_direction(x,f_x,f,subgrad_f,eps,delta,c,rand_sample_N,memory,eval_co
     # For computing num_sample in the end
     eval_counter_old = eval_counter.copy()
 
-    # Step 1 in [GP2021] (Deterministic initial approximation)
-    sample_pts = [x]
-    W = [subgrad_f(x)]; eval_counter[1] += 1
-
-    if memory.max_size > 0:
-        memory.add(sample_pts,W)
+    sample_pts = []
+    W = []
 
     # Add subgradients at sample points in B_eps(x) from memory
     reusing_eps_tolerance = 1e-7
@@ -60,6 +56,13 @@ def descent_direction(x,f_x,f,subgrad_f,eps,delta,c,rand_sample_N,memory,eval_co
 
         sample_pts.extend(sample_pts_mem)
         W.extend(W_mem)
+
+    # Step 1 in [GP2021] (Deterministic initial approximation)
+    sample_pts.append(x)
+    W.append(subgrad_f(x)); eval_counter[1] += 1
+
+    if memory.max_size > 0:
+        memory.add(sample_pts,W)
 
     # Random initial approximation
     if rand_sample_N > 1:
