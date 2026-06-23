@@ -29,8 +29,8 @@ class NeuralNetwork(nn.Module):
     
 model = NeuralNetwork().to("cpu")
 
-reg_param = 0.0001
-N_data = 20
+reg_param = 1*1e-5
+N_data = 12
 loss_fn_type = 'lsq'
 problem_data = loss_NN(model,reg_param,N_data,loss_fn_type)
 
@@ -38,15 +38,13 @@ n = problem_data.x0.shape[0]
 
 # np.random.seed(0)
 # problem_data.x0 = 10*np.random.rand(n) - 5
-problem_data.x0 = np.array([-1.2737644744674492e+00,  1.1316896534481780e+00,
-       -6.0802500315902586e-01,  1.1045578177326596e+00,
-        2.3678135927411392e-01, -3.2709127111716396e-01,
-       -1.6562065817714948e+00, -6.9833969169552712e-01,
-       0,  7.2211570940229886e-01,
-       -6.7013132103765727e-01, -9.3511627427513966e-01,
-        1.2770464483111723e+00, -6.8141573028809174e-02,
-        3.6315927217865878e+00,  2.3955048787183748e+00,
-       -1.3858824895083590e+00]) + 1e-2 * np.random.rand(n)
+problem_data.x0 = np.array([ 1.8707043710581506 ,  0.9797012580637289 , -1.149984375818818  ,
+       -0.9529418297280058 ,  0.13379081598724818,  0.3356932320611862 ,
+       -1.6547984544866747 ,  0.33263217462235534, -0.6990767522803849 ,
+       -0.10888924850817888,  0.6618606222814275 , -0.5939706839051107 ,
+        0.6207110700105015 ,  0.8335780531871593 , -2.004238301055387  ,
+       -1.4558886451760369 ,  1.9150017131588786 ]) + \
+        0*1e-1 * (2*np.random.rand(n)-1)
 
 ## Set the parameters for the method #####
 
@@ -71,6 +69,7 @@ x_opt, f_opt, x_arr_list, fx_arr_list, eval_counter, num_sample_arr_list = dgs(p
 
 ## Plots #################################
 
+np.set_printoptions(precision=50)
 print('loss unreg: ',loss_unreg(x_opt,model,N_data,loss_fn_type))
 
 numiter_arr = [len(fx_arr) for fx_arr in fx_arr_list]

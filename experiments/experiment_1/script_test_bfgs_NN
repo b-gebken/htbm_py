@@ -27,24 +27,22 @@ class NeuralNetwork(nn.Module):
     
 model = NeuralNetwork().to("cpu")
 
-reg_param = 0.0001
+reg_param = 0*1e-5
 N_data = 20
 loss_fn_type = 'lsq'
 problem_data = loss_NN(model,reg_param,N_data,loss_fn_type)
 
 n = problem_data.x0.shape[0]
 
-# np.random.seed(0)
+# np.random.seed(1)
 # problem_data.x0 = 10*np.random.rand(n) - 5
-problem_data.x0 = np.array([-1.2737644744674492e+00,  1.1316896534481780e+00,
-       -6.0802500315902586e-01,  1.1045578177326596e+00,
-        2.3678135927411392e-01, -3.2709127111716396e-01,
-       -1.6562065817714948e+00, -6.9833969169552712e-01,
-       0,  7.2211570940229886e-01,
-       -6.7013132103765727e-01, -9.3511627427513966e-01,
-        1.2770464483111723e+00, -6.8141573028809174e-02,
-        3.6315927217865878e+00,  2.3955048787183748e+00,
-       -1.3858824895083590e+00]) + 1e-0 * np.random.rand(n)
+problem_data.x0 = np.array([ 1.702609416959709  ,  1.061145217498979  , -0.7227144799889186 ,
+       -0.8870194166117329 ,  0.14079184940494102,  0.2232186951682984 ,
+       -2.157980629689821  ,  0.7242306201951149 , -0.9590041800524562 ,
+        1.2791650531062513 , -0.493628101625141  , -0.8116430457736651 ,
+        0.5075063561607176 ,  0.7248626079837421 , -2.6889531716526505 ,
+       -1.8225216625095735 ,  1.9150866605111143 ]) + \
+        1e-1 * (2*np.random.rand(n)-1)
 
 ## Set the parameters for the method #####
 
@@ -66,6 +64,7 @@ result_bfgs = bfgs(problem_data,algo_options)
 ## Plots #################################
 
 x_arr = result_bfgs['x_arr']
+np.set_printoptions(precision=20)
 print('x_final = ',repr(x_arr[-1]))
 
 print('Unregularized loss: ',loss_unreg(x_arr[-1],model,N_data,loss_fn_type))

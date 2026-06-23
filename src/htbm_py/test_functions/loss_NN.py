@@ -10,9 +10,10 @@ from htbm_py.optimization_problem import OptimizationProblem
 import matplotlib.pyplot as plt
 
 data_fn = lambda var : torch.sin(torch.pi * torch.exp(var)) - var
-loss_fn = lambda a,b,x,reg_param : 1/a.shape[0] * sum((a - b)**2) + reg_param*sum(x.abs())
 
-def loss_NN_lsq(model,reg_param,N_data):
+def loss_NN(model,reg_param,N_data,loss_fn_type):
+
+    loss_fn = get_loss_fn(loss_fn_type)
 
     data_x = torch.linspace(-1,1,N_data,dtype=torch.float64)
     data_y = data_fn(data_x)
@@ -54,6 +55,13 @@ def loss_NN_lsq(model,reg_param,N_data):
 
     return problem_data
 
+def get_loss_fn(loss_fn_type):
+    match loss_fn_type:
+        case 'lsq':
+            return lambda a,b,x,reg_param : 1/a.shape[0] * sum((a - b)**2) + reg_param*sum(x.abs())
+        case 'mae':
+            return lambda a,b,x,reg_param : 1/a.shape[0] * sum(abs(a - b)) + reg_param*sum(x.abs())
+
 def unpack(x_torch, model):
     params = {}
     idx = 0
@@ -65,9 +73,11 @@ def unpack(x_torch, model):
 
     return params
 
-def loss_unreg(x,model,N_data):
+def loss_unreg(x,model,N_data,loss_fn_type):
     """Returns the unregularized loss value.
     """
+
+    loss_fn = get_loss_fn(loss_fn_type)
 
     data_x = torch.linspace(-1,1,N_data,dtype=torch.float64)
     data_y = data_fn(data_x)

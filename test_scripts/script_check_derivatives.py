@@ -12,12 +12,12 @@ from htbm_py.optimization_problem import OptimizationProblem
 # n = 4
 # problem_data = chained_CB3_I(n)
 
-### loss_NN_lsq
+### loss_NN
 from torch import nn
 
 import numpy as np
 
-from htbm_py.test_functions.loss_NN_lsq import loss_NN_lsq
+from htbm_py.test_functions.loss_NN import loss_NN
 
 class NeuralNetwork(nn.Module):
     def __init__(self):
@@ -38,7 +38,8 @@ model = NeuralNetwork().to("cpu")
 
 reg_param = 0.0001
 N_data = 20
-problem_data = loss_NN_lsq(model,reg_param,N_data)
+loss_fn_type = 'lsq'
+problem_data = loss_NN(model,reg_param,N_data,loss_fn_type)
 
 n = problem_data.x0.shape[0]
 
