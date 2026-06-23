@@ -82,10 +82,10 @@ print('Norm of gradient:   ',np.linalg.norm(problem_data.oracle[1](result_local_
 
 ## Plot optimization results #############
 
-f_min = problem_data.oracle[0](x_min)
+# f_min = problem_data.oracle[0](x_min)
 
-# x_min = result_local_method['best_x']
-# f_min = result_local_method['best_f_val']
+x_min = result_local_method['best_x']
+f_min = result_local_method['best_f_val']
 
 x_arr = result_local_method['x_arr']
 f_arr = result_local_method['f_arr']
