@@ -47,6 +47,9 @@ def descent_direction(x,f_x,f,subgrad_f,eps,delta,c,rand_sample_N,memory,eval_co
     sample_pts = [x]
     W = [subgrad_f(x)]; eval_counter[1] += 1
 
+    if memory.max_size > 0:
+        memory.add(sample_pts,W)
+
     # Add subgradients at sample points in B_eps(x) from memory
     reusing_eps_tolerance = 1e-7
     if (memory.max_size > 0) and (len(memory.sample_pts) > 0):
@@ -62,7 +65,7 @@ def descent_direction(x,f_x,f,subgrad_f,eps,delta,c,rand_sample_N,memory,eval_co
     if rand_sample_N > 1:
         sample_pts_rnd = []
         W_rnd = []
-        
+
         for k in range(1,rand_sample_N):
             sample_pts_rnd.append(eps * sample_hypersphere(n) + x)
             W_rnd.append(subgrad_f(sample_pts[k])); eval_counter[1] += 1
