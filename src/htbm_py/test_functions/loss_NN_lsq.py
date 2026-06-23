@@ -1,5 +1,4 @@
 # Generates an oracle for the loss function of a simple neural network.
-# %%
 import torch
 from torch import nn
 from torch.func import functional_call
