@@ -85,10 +85,10 @@ print('Norm of gradient:   ',np.linalg.norm(problem_data.oracle[1](result_local_
 
 ## Plot optimization results #############
 
-f_min = problem_data.oracle[0](x_min)
+# f_min = problem_data.oracle[0](x_min)
 
-# x_min = result_local_method['best_x']
-# f_min = result_local_method['best_f_val']
+x_min = result_local_method['best_x']
+f_min = result_local_method['best_f_val']
 
 x_arr = result_local_method['x_arr']
 f_arr = result_local_method['f_arr']
@@ -125,7 +125,7 @@ ax1 = plt.subplot(2,3,1)
 ax1.plot(filtered_inds,np.log10(np.array(filtered_list)),'k.-',markersize=ms,linewidth=lw)
 ax1.plot(range(j_max),[np.log10(eps_arr[j]) for j in range(j_max)],'r.:',markersize=ms,linewidth=lw)
 
-ax1.set_title("$\log_{10}(\| x^j - x^* \|)$")
+ax1.set_title("$\log_{10}(\| x^j - x^{best} \|)$")
 ax1.grid()
 ax1.set_xlabel('$j$')
 ax1.set_yticks(np.arange(np.floor(np.min(np.log10(np.array(filtered_list)))),np.ceil(np.max(np.log10(np.array(filtered_list))))+1,step=2))
@@ -141,7 +141,7 @@ filtered_evals = [eval_counter_arr[j][0] for j in filtered_inds]
 ax2 = plt.subplot(2,3,2)
 ax2.plot(filtered_evals,np.log10(np.array(filtered_list)),'k.-',markersize=ms,linewidth=lw)
 
-ax2.set_title("$\log_{10}(f(x^{j(l)}) - f(x^*))$")
+ax2.set_title("$\log_{10}(f(x^{j(l)}) - f(x^{best}))$")
 ax2.grid()
 ax2.set_xlabel('Oracle calls')
 
@@ -184,7 +184,7 @@ ax6.plot(filtered_norms,filtered_grparam,'k.',markersize=ms,linewidth=lw)
 ax6.grid()
 
 ax6.set_title("$\log_{10}($quad. gr. param.$)$")
-ax6.set_xlabel('$\log_{10}(\| x^j - x^* \|)$')
+ax6.set_xlabel('$\log_{10}(\| x^j - x^{best} \|)$')
 ax6.set_xticks(np.arange(np.floor(np.min(filtered_norms)),np.ceil(np.max(filtered_norms))+1,step=2))
 ax6.set_yticks(np.arange(np.floor(np.min(filtered_grparam)),np.ceil(np.max(filtered_grparam))+1,step=2))
 ax6.set_xlim(np.floor(np.min(filtered_norms))-0.25,np.ceil(np.max(filtered_norms))+0.25)
