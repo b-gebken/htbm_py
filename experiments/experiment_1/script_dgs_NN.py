@@ -1,4 +1,4 @@
-# A script for training a neural network via DGS
+# A script for computing the approximated solutions used in the plot scripts via DGS
 
 import numpy as np
 import matplotlib.pyplot as plt

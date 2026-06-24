@@ -1,4 +1,4 @@
-# A script for training a neural network via BFGS
+# A script for computing the approximated solutions used in the plot scripts via BFGS
 
 import numpy as np
 
