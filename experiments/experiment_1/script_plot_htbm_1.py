@@ -193,6 +193,21 @@ ax6.set_ylim(np.floor(np.min(filtered_grparam))-0.25,np.ceil(np.max(filtered_grp
 fig = plt.gcf()
 fig.set_size_inches(10, 6)
 plt.tight_layout()
+fig.subplots_adjust(top=0.85)
+fig.text(
+    0.01, 0.92,
+    f"N_data: {N_data}, "
+    f"Reg. param: {reg_param:.2e}, "
+    f"Loss type: {loss_fn_type}, "
+    f"$f(x^1)$: {problem_data.oracle[0](x1):.2e}, "
+    "\n"
+    f"$f(x^{{best}})$: {result_local_method['best_f_val']:.2e}, "
+    f"$f(x^1) - f(x^{{best}})$: {problem_data.oracle[0](x1)-result_local_method['best_f_val']:.2e}, "
+    f"$\\| \\nabla f(x^{{best}}) \\|$: {np.linalg.norm(problem_data.oracle[1](result_local_method['best_x'])):.2e}, "
+    f"Unreg. loss: {loss_unreg(result_local_method['best_x'],model,N_data,loss_fn_type):.2e}",
+    fontsize=15,
+    va='bottom'
+)
 plt.show()
 # plt.savefig('experiments/experiment_1/plot_1.png',bbox_inches='tight',dpi=300)
 
