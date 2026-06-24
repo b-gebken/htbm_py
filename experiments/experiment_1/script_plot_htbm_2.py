@@ -123,7 +123,7 @@ plt.rcParams.update({
 })
 plt.rcParams['font.size'] = 15
 
-    # (1,1) ##############################
+        # (1,1) ##############################
 
 diff_list = [np.linalg.norm(x_arr[j] - x_min) for j in range(size_x_arr)]
 filtered_list = [d for d in diff_list if d != 0]
@@ -132,8 +132,9 @@ filtered_inds = [j for j, d in enumerate(diff_list) if d != 0]
 ax1 = plt.subplot(2,3,1)
 ax1.plot(filtered_inds,np.log10(np.array(filtered_list)),'k.-',markersize=ms,linewidth=lw)
 ax1.plot(range(j_max),[np.log10(eps_arr[j]) for j in range(j_max)],'r.:',markersize=ms,linewidth=lw)
+[ax1.axvline(x = j, linestyle = '--', color = 'k') for j, d in enumerate(diff_list) if d == 0]
 
-ax1.set_title("$\log_{10}(\| x^j - x^{\mathrm{fin}} \|)$")
+ax1.set_title("$\log_{10}(\| x^j - x^{best} \|)$")
 ax1.grid()
 ax1.set_xlabel('$j$')
 ax1.set_yticks(np.arange(np.floor(np.min(np.log10(np.array(filtered_list)))),np.ceil(np.max(np.log10(np.array(filtered_list))))+1,step=2))
@@ -148,8 +149,9 @@ filtered_evals = [eval_counter_arr[j][0] for j in filtered_inds]
 
 ax2 = plt.subplot(2,3,2)
 ax2.plot(filtered_evals,np.log10(np.array(filtered_list)),'k.-',markersize=ms,linewidth=lw)
+[ax2.axvline(x = eval_counter_arr[j][0], linestyle = '--', color = 'k') for j, d in enumerate(diff_list) if d == 0]
 
-ax2.set_title("$\log_{10}(f(x^{j(l)}) - f(x^{\mathrm{fin}}))$")
+ax2.set_title("$\log_{10}(f(x^{j(l)}) - f(x^{best}))$")
 ax2.grid()
 ax2.set_xlabel('Oracle calls')
 
