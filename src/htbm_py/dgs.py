@@ -59,10 +59,11 @@ def descent_direction(x,f_x,f,subgrad_f,eps,delta,c,rand_sample_N,memory,eval_co
 
     # Step 1 in [GP2021] (Deterministic initial approximation)
     sample_pts.append(x)
-    W.append(subgrad_f(x)); eval_counter[1] += 1
+    subgrad_f_x = subgrad_f(x)
+    W.append(subgrad_f_x); eval_counter[1] += 1
 
     if memory.max_size > 0:
-        memory.add(sample_pts,W)
+        memory.add([x],[subgrad_f_x])
 
     # Random initial approximation
     if rand_sample_N > 1:
@@ -71,7 +72,7 @@ def descent_direction(x,f_x,f,subgrad_f,eps,delta,c,rand_sample_N,memory,eval_co
 
         for k in range(1,rand_sample_N):
             sample_pts_rnd.append(eps * sample_hypersphere(n) + x)
-            W_rnd.append(subgrad_f(sample_pts[k])); eval_counter[1] += 1
+            W_rnd.append(subgrad_f(sample_pts_rnd[k-1])); eval_counter[1] += 1
 
         sample_pts.extend(sample_pts_rnd)
         W.extend(W_rnd)
