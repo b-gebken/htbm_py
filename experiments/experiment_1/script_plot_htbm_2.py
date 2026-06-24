@@ -202,6 +202,6 @@ fig = plt.gcf()
 fig.set_size_inches(10, 6)
 plt.tight_layout()
 plt.show()
-# plt.savefig('experiments/experiment_1/plot_1.png',bbox_inches='tight',dpi=300)
+# plt.savefig('experiments/experiment_1/plot_2.png',bbox_inches='tight',dpi=300)
 
 
