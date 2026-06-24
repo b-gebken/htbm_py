@@ -74,7 +74,7 @@ x_min = np.array([-1.3741462087307856e+00, -5.9364833787637949e-01,
 
 np.random.seed(0)
 x1 = x_min + 1*1e-3 * (2*np.random.rand(n)-1)
-eps1 = 5*1e-3
+eps1 = 1*1e-2
 
 ## Run method ############################
 
