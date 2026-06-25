@@ -20,7 +20,7 @@ There are two question we want to investigate with our experiments:
 
 We emphasize that our first question is only of theoretical interest, as the HTBM (in its current form) is not well suited for this class of problems:
 - Global convergence is typically more important than (fast) local convergence.
-- The bundling procedure requires potentially many gradients and (full) Hessians to be stored.
+- The bundling procedure requires potentially many gradients and (full) Hessians to be computed and stored.
 - The trust-region (TR) subproblems that arise are expensive to solve.
 
 As such, we only consider small NNs. Furthermore, for simplicity, we do not combine the HTBM with PyTorch by implementing the former as an Optimizer subclass. Instead, after creating the NN, we use the module src/htbm_py/test_functions/loss_NN.py to create an oracle that we can pass to a stand-alone version of the HTBM. This is likely far less efficient, but allows us to work with the standard version of the HTBM. 
@@ -60,7 +60,19 @@ The fact that the bundle size is larger than one also suggests that $f$ is nonsm
   <strong>Figure 2.</strong>
 </p>
 
+As in Fig. 1, we see R-superlinear convergence of $(x^j)_j$. (Note that for $\\| x^j - x^{{best}} \\|\_2 < 10^{-10}$, the results are not meaningful due to the limited precision of the TR subproblem solution.) However, in contrast to the first experiment, the bundle size is constantly 1. This suggests that, despite the nonsmoothness of the ReLU activation function, $f$ is smooth around the minimum.
 
+In the first two experiments, the number of data points was small enough for the model to be able to perfectly fit the data. For the final experiment with the MSE loss function, we choose $N_{data} = 100$ (with still $\lambda = 0$). 
+
+<p>
+  <img src="experiments/experiment_1/plot_3.png"/>
+  <br/>
+  <strong>Figure 3.</strong>
+</p>
+
+We again see superlinear behavior of $(x^j)_j$ with the same lack of nonsmoothness as in the previous experiment.
+
+### Experiments with the mean absolute error loss
 
 <h1>Acknowledgements</h1>
 This research was funded by Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) – Projektnummer 545166481.
