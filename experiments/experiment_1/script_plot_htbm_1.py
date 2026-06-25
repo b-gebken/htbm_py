@@ -202,11 +202,12 @@ fig.text(
     f"Reg. param: {reg_param:.2e}, "
     f"Loss type: {loss_fn_type}, "
     f"$f(x^1)$: {problem_data.oracle[0](x1):.2e}, "
+    f"Unreg. loss at $x^1$: {loss_unreg(x1,model,N_data,loss_fn_type):.2e}, "
     "\n"
     f"$f(x^{{best}})$: {result_local_method['best_f_val']:.2e}, "
     f"$f(x^1) - f(x^{{best}})$: {problem_data.oracle[0](x1)-result_local_method['best_f_val']:.2e}, "
     f"$\\| \\nabla f(x^{{best}}) \\|$: {np.linalg.norm(problem_data.oracle[1](result_local_method['best_x'])):.2e}, "
-    f"Unreg. loss: {loss_unreg(result_local_method['best_x'],model,N_data,loss_fn_type):.2e}",
+    f"Unreg. loss at $x^{{best}}$: {loss_unreg(result_local_method['best_x'],model,N_data,loss_fn_type):.2e}",
     fontsize=15,
     va='bottom'
 )
