@@ -1,5 +1,4 @@
 # A script for training a neural network via HTBM
-# %%
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -9,6 +8,8 @@ from htbm_py.test_functions.loss_NN import visualize
 from htbm_py.test_functions.loss_NN import loss_unreg
 
 from htbm_py.htbm import local_method
+
+SAVE_PLOT = False
 
 class NeuralNetwork(nn.Module):
     def __init__(self):
@@ -210,7 +211,8 @@ fig.text(
     fontsize=15,
     va='bottom'
 )
-plt.show()
-# plt.savefig('experiments/experiment_2/plot_3_1.png',bbox_inches='tight',dpi=300)
 
-
+if SAVE_PLOT:
+    plt.savefig('experiments/experiment_2/plot_3_1.png',bbox_inches='tight',dpi=300)
+else:
+    plt.show()

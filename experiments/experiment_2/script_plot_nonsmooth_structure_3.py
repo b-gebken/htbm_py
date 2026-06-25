@@ -1,11 +1,12 @@
 # A script for testing the function descent_direction from htbm_py.dgs
-# %%
 import numpy as np
 
 from htbm_py.dgs import descent_direction
 from htbm_py.memory import Memory
 
 import matplotlib.pyplot as plt
+
+SAVE_PLOT = False
 
 ## loss_NN
 from torch import nn
@@ -142,5 +143,7 @@ fig.set_size_inches(10, 8)
 
 plt.tight_layout()
 
-plt.show()
-# plt.savefig('experiments/experiment_2/plot_3_2.png',bbox_inches='tight',dpi=300)
+if SAVE_PLOT:
+    plt.savefig('experiments/experiment_2/plot_3_2.png',bbox_inches='tight',dpi=300)
+else:
+    plt.show()

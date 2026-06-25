@@ -1,5 +1,4 @@
 # A script for training a neural network via HTBM
-# %%
 import numpy as np
 import matplotlib.pyplot as plt
 
