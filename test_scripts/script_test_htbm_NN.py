@@ -29,7 +29,7 @@ model = NeuralNetwork().to("cpu")
 
 reg_param = 0.0001
 N_data = 20
-loss_fn_type = 'lsq'
+loss_fn_type = 'mse'
 problem_data = loss_NN(model,reg_param,N_data,loss_fn_type)
 
 n = problem_data.x0.shape[0]

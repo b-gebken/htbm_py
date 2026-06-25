@@ -57,7 +57,7 @@ def loss_NN(model,reg_param,N_data,loss_fn_type):
 
 def get_loss_fn(loss_fn_type):
     match loss_fn_type:
-        case 'lsq':
+        case 'mse':
             return lambda a,b,x,reg_param : 1/a.shape[0] * sum((a - b)**2) + reg_param*sum(x.abs())
         case 'mae':
             return lambda a,b,x,reg_param : 1/a.shape[0] * sum(abs(a - b)) + reg_param*sum(x.abs())
