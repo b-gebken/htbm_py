@@ -32,7 +32,7 @@ The details of our experiments are as follows:
 - For regularizing the loss function, we use the L1-norm $\\| x \\|\_1$ of the weights, multiplied by a regularization parameter $\lambda \geq 0$.
 - The number of data points $N_{data}$, the type of loss function, and the regularization parameter $\lambda$ vary throughout the experiments.
 
-### Experiments with the mean squared error loss
+### 1) Experiments with the mean squared error loss
 
 We first consider the case where the loss function is the _mean squared error_ (MSE), such that the overall objective functions is $f(x) = \frac{1}{N_{{data}}} \sum_{i = 1}^{N_{{data}}} \\| F(x,t_i) - y_i \\|\_2^2 + \lambda \\| x \\|_1$. In the first experiment, we consider $N\_{data} = 7$ data points and $\lambda = 10^{-4}$. The result is shown in Fig. 1.
 
@@ -72,9 +72,9 @@ In the first two experiments, the number of data points was small enough for the
 
 We again see superlinear behavior of $(x^j)_j$ with the same lack of nonsmoothness as in the previous experiment.
 
-### Experiments with the mean absolute error loss
+### 2) Experiments with the mean absolute error loss
 
-The apparent smoothness of the (unregularized) objective function in the above experiments may be related to the fact that the MSE loss squares the residuals. (For example, simply squaring the ReLU function leads to a continuously differentiable function.) To obtain a more interesting nonsmoothness, we now use the _mean absolute loss_ (MAE), where the resulting objective function is $f(x) = \frac{1}{N_{{data}}} \sum_{i = 1}^{N_{{data}}} \| F(x,t_i) - y_i \|\_2 + \lambda \\| x \\|_1$. For the first experiment, as in Fig. 1, we again consider $N\_{data} = 7$ data points and $\lambda = 10^{-4}$. The result is shown in Fig. 4.
+The apparent smoothness of the (unregularized) objective function in the above experiments may be related to the fact that the MSE loss squares the residuals. (For example, simply squaring the ReLU function leads to a continuously differentiable function.) To obtain a more interesting nonsmoothness, we now use the _mean absolute loss_ (MAE), where the resulting objective function is $f(x) = \frac{1}{N_{{data}}} \sum_{i = 1}^{N_{{data}}} \| F(x,t_i) - y_i \| + \lambda \\| x \\|_1$. For the first experiment, as in Fig. 1, we again consider $N\_{data} = 7$ data points and $\lambda = 10^{-4}$. The result is shown in Fig. 4.
 
 <p>
   <img src="experiments/experiment_2/plot_1.png"/>
@@ -107,7 +107,7 @@ For each column in Fig. 6, the meaning of the three subplots is as follows:
 - The second plot shows the singular values of the matrix whose columns are the subgradients in $W$. It can be used to obtain a lower bound for the (affine) dimension of the subdifferential at $x^{{best}}$.
 - The third plot shows the smallest eigenvalue of the Hessian of $f$ at each of the sample points, where negative values indicate nonconvexity.
 
-The left column in Fig. 6 shows the result for a standard call of the method, where the method tries to sample as few subgradients as possible for the convex combination. In the first plot, we see that the (approximated) necessary condition for $f$ being lower-C1 is not violated. The second plot gives the lower bound $3$ for the dimension of the subdifferential. The third plot suggests that $f$ is nonconvex. The right column in Fig. 6 shows a call of the method with warm-starting, where $W$ was initialized by $100$ random points from the $\varepsilon$-ball. We see that the necessary condition for lower-C1 is still not violated, the lower bound the dimension of the subdifferential is $7$ and $f$ again nonconvex at each sample point.
+The left column in Fig. 6 shows the result for a standard call of the method, where the method tries to sample as few subgradients as possible for the convex combination. In the first plot, we see that the (approximated) necessary condition for $f$ being lower-C1 is not violated. The second plot gives the lower bound $3$ for the dimension of the subdifferential. The third plot suggests that $f$ is nonconvex. The right column in Fig. 6 shows a call of the method with warm-starting, where $W$ was initialized by $100$ random points from the $\varepsilon$-ball. We see that the necessary condition for lower-C1 is still holds, the lower bound the dimension of the subdifferential is $7$ and $f$ again nonconvex at each sample point.
 
 <h1>Acknowledgements</h1>
 This research was funded by Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) – Projektnummer 545166481.
