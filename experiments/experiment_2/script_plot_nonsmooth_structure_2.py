@@ -92,12 +92,12 @@ max_dot_list = [np.max([np.dot(grad,g) for grad in memory.oracle_vals]) for g in
 
 print(f"Max. violation: {np.max(np.asarray(max_dot_list) - np.asarray(dir_deriv_list))}")
 
-ax1 = plt.subplot(2,2,1)
+ax1 = plt.subplot(3,2,1)
 
 ax1.plot(dir_deriv_list,'r-')
 ax1.plot(max_dot_list,'b-')
 
-ax1.legend(['$df(x,g)$','$\max_{{\\xi \\in \\partial f(x)}} \\langle \\xi,g \\rangle$'])
+ax1.legend(['$df(x,g)$','$\max_{{\\xi \\in \\partial f(x)}} \\langle \\xi,g \\rangle$'],loc='upper right',fontsize=12)
 
 ax1.set_xlabel('Sampled gradients')
 ax1.grid()
@@ -107,10 +107,20 @@ ax1.set_title(f"Max. violation: {np.max(np.asarray(max_dot_list) - np.asarray(di
 
 U, S, Vh = np.linalg.svd(np.asarray(memory.oracle_vals), full_matrices=True)
 
-ax3 = plt.subplot(2,2,3)
+ax3 = plt.subplot(3,2,3)
 ax3.plot(np.log10(S),'k.-')
 ax3.grid()
 ax3.set_title("$\log_{10}($Singular values$)$")
+
+        # (3,1) ##############################
+
+hess_list = [problem_data.oracle[2](memory.sample_pts[i]) for i in range(len(memory.sample_pts))]
+min_eigs = [np.min(np.linalg.eigvalsh(hess_list[i])) for i in range(len(memory.sample_pts))]
+
+ax5 = plt.subplot(3,2,5)
+ax5.plot(min_eigs,'k.-')
+ax5.grid()
+ax5.set_title("Smallest Eigenval. of Hessians")
 
         # (1,2) ##############################
 
@@ -121,12 +131,12 @@ max_dot_list = [np.max([np.dot(grad,g) for grad in memory.oracle_vals]) for g in
 
 print(f"Max. violation: {np.max(np.asarray(max_dot_list) - np.asarray(dir_deriv_list))}")
 
-ax2 = plt.subplot(2,2,2)
+ax2 = plt.subplot(3,2,2)
 
 ax2.plot(dir_deriv_list,'r-')
 ax2.plot(max_dot_list,'b-')
 
-ax2.legend(['$df(x,g)$','$\max_{{\\xi \\in \\partial f(x)}} \\langle \\xi,g \\rangle$'])
+# ax2.legend(['$df(x,g)$','$\max_{{\\xi \\in \\partial f(x)}} \\langle \\xi,g \\rangle$'])
 
 ax2.set_xlabel('Sampled gradients')
 ax2.grid()
@@ -136,13 +146,23 @@ ax2.set_title(f"Max. violation: {np.max(np.asarray(max_dot_list) - np.asarray(di
 
 U, S, Vh = np.linalg.svd(np.asarray(memory.oracle_vals), full_matrices=True)
 
-ax3 = plt.subplot(2,2,4)
+ax3 = plt.subplot(3,2,4)
 ax3.plot(np.log10(S),'k.-')
 ax3.grid()
 ax3.set_title("$\log_{10}($Singular values$)$")
 
+        # (2,3) ##############################
+
+hess_list = [problem_data.oracle[2](memory.sample_pts[i]) for i in range(len(memory.sample_pts))]
+min_eigs = [np.min(np.linalg.eigvalsh(hess_list[i])) for i in range(len(memory.sample_pts))]
+
+ax6 = plt.subplot(3,2,6)
+ax6.plot(min_eigs,'k.-')
+ax6.grid()
+ax6.set_title("Smallest Eigenval. of Hessians")
+
 fig = plt.gcf()
-fig.set_size_inches(10, 8)
+fig.set_size_inches(8, 10)
 
 plt.tight_layout()
 
