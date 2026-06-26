@@ -97,11 +97,11 @@ ax1 = plt.subplot(3,2,1)
 ax1.plot(dir_deriv_list,'r-')
 ax1.plot(max_dot_list,'b-')
 
-ax1.legend(['$df(x,g)$','$\max_{{\\xi \\in \\partial f(x)}} \\langle \\xi,g \\rangle$'],loc='upper right',fontsize=12)
+ax1.legend(['$df(x^{best},g)$','$\max_{{\\xi \\in W}} \\langle \\xi,g \\rangle$'],loc='upper right',fontsize=12)
 
 ax1.set_xlabel('Sampled gradients')
 ax1.grid()
-ax1.set_title(f"Max. violation: {np.max(np.asarray(max_dot_list) - np.asarray(dir_deriv_list)):.4e}")
+ax1.set_title(f"$|W| = {len(memory.sample_pts)}$, max. violation: {np.max(np.asarray(max_dot_list) - np.asarray(dir_deriv_list)):.2e}")
 
         # (2,1) ##############################
 
@@ -140,7 +140,7 @@ ax2.plot(max_dot_list,'b-')
 
 ax2.set_xlabel('Sampled gradients')
 ax2.grid()
-ax2.set_title(f"Max. violation: {np.max(np.asarray(max_dot_list) - np.asarray(dir_deriv_list)):.4e}")
+ax2.set_title(f"$|W| = {len(memory.sample_pts)}$, max. violation: {np.max(np.asarray(max_dot_list) - np.asarray(dir_deriv_list)):.2e}")
 
         # (2,2) ##############################
 
