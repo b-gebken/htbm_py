@@ -117,7 +117,7 @@ plt.rcParams.update({
 })
 plt.rcParams['font.size'] = 15
 
-        # (1,1) ##############################
+    # (1,1) ##############################
 
 diff_list = [np.linalg.norm(x_arr[j] - x_min) for j in range(size_x_arr)]
 filtered_list = [d for d in diff_list if d != 0]
@@ -128,7 +128,7 @@ ax1.plot(filtered_inds,np.log10(np.array(filtered_list)),'k.-',markersize=ms,lin
 ax1.plot(range(j_max),[np.log10(eps_arr[j]) for j in range(j_max)],'r.:',markersize=ms,linewidth=lw)
 [ax1.axvline(x = j, linestyle = '--', color = 'k') for j, d in enumerate(diff_list) if d == 0]
 
-ax1.set_title("$\log_{10}(\| x^j - x^{best} \|)$")
+ax1.set_title("$\log_{10}(\| x^j - x^{best} \|_2)$")
 ax1.grid()
 ax1.set_xlabel('$j$')
 ax1.set_yticks(np.arange(np.floor(np.min(np.log10(np.array(filtered_list)))),np.ceil(np.max(np.log10(np.array(filtered_list))))+1,step=2))
@@ -188,7 +188,7 @@ ax6.plot(filtered_norms,filtered_grparam,'k.',markersize=ms,linewidth=lw)
 ax6.grid()
 
 ax6.set_title("$\log_{10}($quad. gr. param.$)$")
-ax6.set_xlabel('$\log_{10}(\| x^j - x^{best} \|)$')
+ax6.set_xlabel('$\log_{10}(\| x^j - x^{best} \|_2)$')
 ax6.set_xticks(np.arange(np.floor(np.min(filtered_norms)),np.ceil(np.max(filtered_norms))+1,step=2))
 ax6.set_yticks(np.arange(np.floor(np.min(filtered_grparam)),np.ceil(np.max(filtered_grparam))+1,step=2))
 ax6.set_xlim(np.floor(np.min(filtered_norms))-0.25,np.ceil(np.max(filtered_norms))+0.25)
@@ -196,7 +196,6 @@ ax6.set_ylim(np.floor(np.min(filtered_grparam))-0.25,np.ceil(np.max(filtered_grp
 
 fig = plt.gcf()
 fig.set_size_inches(10, 6)
-
 plt.tight_layout()
 fig.subplots_adjust(top=0.85)
 fig.text(
@@ -209,7 +208,7 @@ fig.text(
     "\n"
     f"$f(x^{{best}})$: {result_local_method['best_f_val']:.2e}, "
     f"$f(x^1) - f(x^{{best}})$: {problem_data.oracle[0](x1)-result_local_method['best_f_val']:.2e}, "
-    f"$\\| \\nabla f(x^{{best}}) \\|$: {np.linalg.norm(problem_data.oracle[1](result_local_method['best_x'])):.2e}, "
+    f"$\\| \\nabla f(x^{{best}}) \\|_2$: {np.linalg.norm(problem_data.oracle[1](result_local_method['best_x'])):.2e}, "
     f"Unreg. loss at $x^{{best}}$: {loss_unreg(result_local_method['best_x'],model,N_data,loss_fn_type):.2e}",
     fontsize=15,
     va='bottom'
