@@ -6,7 +6,7 @@ from htbm_py.memory import Memory
 
 import matplotlib.pyplot as plt
 
-SAVE_PLOT = True
+SAVE_PLOT = False
 
 ## loss_NN
 from torch import nn
@@ -121,6 +121,8 @@ ax5.set_title("Smallest Eigenval. of Hessians")
 
         # (1,2) ##############################
 
+memory = Memory(1000)
+eval_counter = np.zeros(2)
 v, f_eps_v, num_sample = descent_direction(x,f_x,f,subgrad_f,eps,delta,c,100,memory,eval_counter,disp_flag)
 
 dir_deriv_list = [(f(x + h * g) - f(x))/h for g in memory.oracle_vals]
