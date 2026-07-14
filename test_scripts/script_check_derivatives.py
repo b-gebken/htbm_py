@@ -12,36 +12,59 @@ from htbm_py.optimization_problem import OptimizationProblem
 # n = 4
 # problem_data = chained_CB3_I(n)
 
+### LW2019_84
+np.random.seed(0)
+from htbm_py.test_functions.lw2019_84 import lw2019_84
+n = 50
+k = 20
+lambd = np.random.rand(k)
+lambd = lambd / np.sum(lambd)
+tmp = [2*np.random.rand(n) - 1 for _ in range(k)]
+tmp2 = np.matmul(lambd,np.stack(tmp))
+g_arr = [v - tmp2 for v in tmp]
+
+H_arr = []
+for _ in range(k):
+    tmp = 2*np.random.rand(n,n) - 1
+    H_arr.append(tmp @ tmp.transpose())
+
+c_arr = [np.random.rand() for _ in range(k)]
+
+problem_data = lw2019_84(g_arr,H_arr,c_arr)
+
+np.random.seed(None)
+problem_data.x0 = np.zeros(n) + 2*np.random.rand(n) - 1
+
 ### loss_NN
-from torch import nn
+# from torch import nn
 
-import numpy as np
+# import numpy as np
 
-from htbm_py.test_functions.loss_NN import loss_NN
+# from htbm_py.test_functions.loss_NN import loss_NN
 
-class NeuralNetwork(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.linear_relu_stack = nn.Sequential(
-            nn.Linear(1, 3),
-            nn.ReLU(),
-            nn.Linear(3, 2),
-            nn.ReLU(),
-            nn.Linear(2, 1),
-        )
+# class NeuralNetwork(nn.Module):
+#     def __init__(self):
+#         super().__init__()
+#         self.linear_relu_stack = nn.Sequential(
+#             nn.Linear(1, 3),
+#             nn.ReLU(),
+#             nn.Linear(3, 2),
+#             nn.ReLU(),
+#             nn.Linear(2, 1),
+#         )
 
-    def forward(self, x):
-        logits = self.linear_relu_stack(x)
-        return logits
+#     def forward(self, x):
+#         logits = self.linear_relu_stack(x)
+#         return logits
     
-model = NeuralNetwork().to("cpu")
+# model = NeuralNetwork().to("cpu")
 
-reg_param = 0.0001
-N_data = 20
-loss_fn_type = 'mse'
-problem_data = loss_NN(model,reg_param,N_data,loss_fn_type)
+# reg_param = 0.0001
+# N_data = 20
+# loss_fn_type = 'mse'
+# problem_data = loss_NN(model,reg_param,N_data,loss_fn_type)
 
-n = problem_data.x0.shape[0]
+# n = problem_data.x0.shape[0]
 
 ## Generate test points ##################
 
@@ -86,8 +109,9 @@ for i in range(N_pts):
     grad_error_arr[i] = np.max(abs(grad_i - grad_exact))
 
     if grad_error_arr[i] > 1e-5:
-        print(grad_i)
-        print(grad_f(pts[i]))
+        print(grad_error_arr[i])
+        # print(grad_i)
+        # print(grad_f(pts[i]))
 
     # Compute numerical Hessian
     hess_i = np.zeros([n,n])
@@ -106,8 +130,9 @@ for i in range(N_pts):
     hess_error_arr[i] = np.max(abs(hess_i - hess_exact))
 
     if hess_error_arr[i] > 1e-3:
-        print(hess_i)
-        print(hess_f(pts[i]))
+        print(hess_error_arr[i])
+        # print(hess_i)
+        # print(hess_f(pts[i]))
 
 print('Max. grad error: ',np.max(grad_error_arr))
 print('Max. hess error: ',np.max(hess_error_arr))
