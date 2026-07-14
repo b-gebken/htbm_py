@@ -5,7 +5,6 @@ A simple Python implementation of a trust-region bundle method using higher-orde
 [GU2026a] Gebken, Ulbrich (2026): Superlinear convergence in nonsmooth optimization via higher-order cutting-plane models (https://arxiv.org/abs/2603.23236)<br/>
 [GU2026b] Gebken, Ulbrich (2026): Enclosing minima in nonsmooth optimization via trust regions of higher-order cutting-plane models (https://arxiv.org/abs/2603.23261)<br/>
 
-So far, only the local method from [GU2026a] is included, but not the global method of [GU2026b].
 For testing purposes, Python implementations of BFGS and DGS (https://github.com/b-gebken/DGS) are included.
 
 ## Experiments on training neural networks
