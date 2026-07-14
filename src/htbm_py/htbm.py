@@ -126,11 +126,11 @@ def generate_W(x,eps,f_x,c,reusing_eps_tolerance,memory,eval_counter,problem_dat
 
     if disp_flag >= 2:
         print("                ...Alg. 4.1 finished!")
-        print("                ",N_W - init_N_sample - N_reused," additional sample points required.");
-        print("                f(z_bar) = ",f_z_bar);
-        print("                theta    = ",theta);
-        print("                f(z_bar) - theta  = ",f_z_bar - theta);
-        print("                eps^(q+sigma)     = ",eps**(q+sigma));
+        print("                ",N_W - init_N_sample - N_reused," additional sample points required.")
+        print("                f(z_bar) = ",f_z_bar)
+        print("                theta    = ",theta)
+        print("                f(z_bar) - theta  = ",f_z_bar - theta)
+        print("                eps^(q+sigma)     = ",eps**(q+sigma))
 
     # Store newly sampled elements
     if memory.max_size > 0:
@@ -141,7 +141,7 @@ def generate_W(x,eps,f_x,c,reusing_eps_tolerance,memory,eval_counter,problem_dat
     return z_bar, f_z_bar, mu, numsample
 
 def local_method(x1,eps1,problem_data,algo_options):
-    """ Local higher-order trust-region bundle method
+    """Local higher-order trust-region bundle method
 
     An implementation of Alg. 4.2 from [GU2026a]. Models of order q > 2 are
     currently not supported. 
@@ -211,7 +211,7 @@ def local_method(x1,eps1,problem_data,algo_options):
         # j+1 due to Python indexing
         eps_arr[j] = eps1 * kappa**(((q+sigma)/p)**((j+1)-1) - 1)
 
-        if disp_flag >= 1:
+        if disp_flag >= 2:
             print("            ----- Iteration j = ",j,"/",j_max," -------------------")
             print("                eps_j = ",eps_arr[j])
 
@@ -219,7 +219,7 @@ def local_method(x1,eps1,problem_data,algo_options):
         #### Step 3 ####
         ################
 
-        if disp_flag >= 1:
+        if disp_flag >= 2:
             print("                Applying Alg. 4.1...")
 
         # Execute Alg. 4.1 for generating the set W
@@ -237,7 +237,7 @@ def local_method(x1,eps1,problem_data,algo_options):
         # Save activity of trust-region constraint
         act_arr[j] = np.linalg.norm(z_bar - x_arr[j],ord=norm_flag)/eps_arr[j]
 
-        if disp_flag >= 1:
+        if disp_flag >= 2:
             print("                activity   = ",act_arr[j])
             print("                act_thresh = ",act_thr)
             print("                j     = ",j)
@@ -301,3 +301,193 @@ def local_method(x1,eps1,problem_data,algo_options):
     }
 
     return result_local_method
+
+def global_method(problem_data,algo_options):
+    """Global higher-order trust-region bundle method
+
+    An implementation of Alg. 2 from [GU2026b]. Models of order q > 2 are
+    currently not supported. 
+
+    For arguments and return values, see
+    https://github.com/b-gebken/higher-order-trust-region-bundle-method/blob/main/Algorithms/global_method.m
+
+    [GU2026b] Gebken, Ulbrich (2026): Enclosing minima in nonsmooth optimization 
+    via trust regions of higher-order cutting-plane models
+    (https://arxiv.org/abs/2603.23261)
+    """
+
+    # Read problem specification
+    x0 = problem_data.x0
+    n = x0.shape[0]
+    oracle = problem_data.oracle
+
+    # Read algorithm options
+    q = algo_options['q']
+    p = algo_options['p']
+    sigma = algo_options['sigma']
+    disp_flag = algo_options['disp_flag']
+    memory_max_size = algo_options['memory_max_size']
+    local_flag = algo_options['local_flag']
+
+    global_options = algo_options['global_options']
+    delta_arr = global_options['delta_arr']
+    tau_arr = global_options['tau_arr']
+    c = global_options['c']
+    norm_flag = global_options['norm_flag']
+    i_max = global_options['i_max']
+
+    # For measuring runtime
+    if disp_flag >= 1:
+        start_time = time.time()
+
+    # Initialize variables
+    j_max = len(delta_arr)
+    x_cell = []
+    numsample_cell = []
+    numsample_arr = []
+    eval_counter = np.zeros(q+1)
+    result_local_phase = []
+
+    # Initialize the memory
+    memory = Memory(memory_max_size)
+
+    x_arr = [x0]
+    f_x = oracle[0](x0)
+    eval_counter[0] += 1
+
+    # Tolerance for determining whether memorized points lie in the current trust region.
+    reusing_eps_tolerance = 1e-7
+
+    ##################
+    ##### Step 1 #####
+    ##################
+
+    # Outer j-loop
+    for j in range(j_max):
+
+        if disp_flag >= 2:
+            print('----- Outer iteration j = ',j,' -------------------')
+            print('    delta_j = ',delta_arr[j],', tau_j = ',tau_arr[j])
+
+        ##################
+        ##### Step 2 #####
+        ##################
+
+        # Inner i-loop
+        for i in range(i_max):
+
+            if disp_flag >= 2:
+                print('    ----- Inner iteration j = ',j,', i = ',i,' -----')
+                print('        delta_j = ',delta_arr[j],', tau_j = ',tau_arr[j])
+                print('        Applying Alg. 4.1...')
+
+            ##################
+            ##### Step 3 #####
+            ##################
+
+            z_bar, f_z_bar, mu, numsample = generate_W(x_arr[i],delta_arr[j],f_x,c,reusing_eps_tolerance,memory,eval_counter,problem_data,algo_options,global_options)
+
+            # Save number of sample points
+            numsample_arr.append(numsample)
+
+            if disp_flag >= 2:
+                print('        f(x) = ',f_x)
+                print('        f(x) - f(z) = ',f_x - f_z_bar)
+                print('        (f(x) - f(z))/delta_j^p = ',(f_x - f_z_bar)/(delta_arr[j]**p))
+                print('        tau_j                 = ',tau_arr[j])
+                print('        ||z - x||/delta_j = ',np.linalg.norm(z_bar - x_arr[i],ord=norm_flag)/delta_arr[j])
+
+            ##################
+            ##### Step 4 #####
+            ##################
+
+            if (f_x - f_z_bar)/(delta_arr[j]**p) < tau_arr[j]:
+                
+                ##################
+                ##### Step 5 #####
+                ##################
+
+                if disp_flag >= 2:
+                    print('        Decision: Break i-loop.')
+
+                break
+            else:
+
+                ##################
+                ##### Step 7 #####
+                ##################
+
+                if disp_flag >= 2:
+                    print('        Decision: Sufficient decrease.')
+
+                x_arr.append(z_bar)
+                f_x = f_z_bar
+
+        # Save information of inner iteration
+        x_cell.append(x_arr)
+        numsample_cell.append(numsample_arr)
+
+        ###################
+        ##### Step 10 #####
+        ###################
+
+        if local_flag:
+            if disp_flag >= 2:
+                print('        Attempting local method...')
+            
+            result_local_method = local_method(x_arr[i],delta_arr[j],problem_data,algo_options)
+
+            result_local_phase.append(result_local_method)
+            eval_counter = [(eval_counter[i] + result_local_method['eval_counter'][i]) for i in range(q+1)]
+            local_success_flag = result_local_method['success_flag']
+
+            if local_success_flag:
+                break
+
+        else:
+            if disp_flag >= 2:
+                print('        Skipping local method.')
+            
+            local_success_flag = False
+        
+        ###################
+        ##### Step 11 #####
+        ###################
+
+        x_arr = [x_cell[-1][-1]]
+    
+        if i == i_max:
+            print('Warning: Maximal number of iterations reached before stopping criterion is satisfied')
+
+    # Prepare output
+    result_global_phase = {
+        'local_success_flag ': local_success_flag,
+        'x_cell': x_cell,
+        'eval_counter': eval_counter,
+        'numsample_cell': numsample_cell
+    }
+    
+    if local_success_flag:
+        result_global_phase['best_f_val'] = result_local_phase[-1]['best_f_val']
+        result_global_phase['best_x'] = result_local_phase[-1]['best_x']
+    else:
+        result_global_phase['best_f_val'] = f_x
+        result_global_phase['best_x'] = x_cell[-1][-1]
+
+    if disp_flag >= 1:
+        if local_success_flag:
+            print('Algorithm finished in local phase')
+            print('    Final objective value =',result_local_phase[-1]['best_f_val'])
+        else:
+            print('Algorithm finished outside of local phase')
+            print('    Final objective value =',result_global_phase['best_f_val'])
+        
+        end_time = time.time()
+        print('    Runtime               = ',end_time - start_time,'s')
+        print('    Required evaluations: ')
+        print('        f       - ',eval_counter[0])
+        print('        subgrad - ',eval_counter[1])
+        if q > 1:
+            print('        subhess - ',eval_counter[2])
+
+    return result_global_phase
