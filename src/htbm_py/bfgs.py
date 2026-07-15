@@ -1,7 +1,7 @@
 import numpy as np
 import time
 
-def linesearch_armijo_wolfe(x,p,f_x,grad_f_x,problem_data,algo_options):
+def linesearch_armijo_wolfe(x,p,f_x,grad_f_x,eval_counter,problem_data,algo_options):
     """Inexact Wolfe line search
 
     The inexact Wolfe line search from [Lewis, Overton (2013)], Alg. 4.6,
@@ -27,10 +27,12 @@ def linesearch_armijo_wolfe(x,p,f_x,grad_f_x,problem_data,algo_options):
 
     while True:
         f_xtp = f(x + t*p)
+        eval_counter[0] += 1
         if ~A(t,f_xtp):
             beta = t
         else:
             grad_f_xtp = grad_f(x + t*p)
+            eval_counter[1] += 1
             if ~W(grad_f_xtp):
                 alpha = t
             else:
@@ -72,9 +74,13 @@ def bfgs(problem_data,algo_options):
     disp_flag  = algo_options['disp_flag']
 
     # Initialization
+    eval_counter = np.zeros(2)
+    
     x_arr = [x0]
     f_arr = [f(x0)]
+    eval_counter[0] += 1
     grad_arr = [grad_f(x0)]
+    eval_counter[1] += 1
 
     t_arr = []
     y_arr = []
@@ -98,7 +104,7 @@ def bfgs(problem_data,algo_options):
         p_arr.append(-H_arr[k] @ grad_arr[k])
 
         # Compute Wolfe step length
-        t, f_tmp, grad_tmp = linesearch_armijo_wolfe(x_arr[k],p_arr[k],f_arr[k],grad_arr[k],problem_data,algo_options)
+        t, f_tmp, grad_tmp = linesearch_armijo_wolfe(x_arr[k],p_arr[k],f_arr[k],grad_arr[k],eval_counter,problem_data,algo_options)
         t_arr.append(t)
         f_arr.append(f_tmp)
         grad_arr.append(grad_tmp)
@@ -149,7 +155,8 @@ def bfgs(problem_data,algo_options):
         't_arr': t_arr,
         'y_arr': y_arr,
         's_arr': s_arr,
-        'p_arr': p_arr
+        'p_arr': p_arr,
+        'eval_counter': eval_counter
     }
 
     if disp_flag > 0:
@@ -158,5 +165,7 @@ def bfgs(problem_data,algo_options):
         print('    norm grad = ',np.linalg.norm(grad_arr[k]))
         print('    iters     = ',k)
         print('    time      = ',end_time - start_time)
+        print('    f eval    = ',eval_counter[0])
+        print('    grad eval = ',eval_counter[1])
 
     return result_bfgs
